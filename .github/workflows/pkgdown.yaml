@@ -1,0 +1,39 @@
+name: build
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    container: rocker/verse:4.0.2
+    steps:
+      - name: trigger action on main site
+        run: |
+          curl \
+            -X POST \
+            -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d '{"ref":"master"}' \
+            https://api.github.com/repos/waldronbios2/cunybios2/actions/workflows/build.yaml/dispatches
+      - name: Checkout Repository
+        uses: actions/checkout@v1
+      # System dependencies
+      - name: Install apt dependencies
+        run: |
+          apt-get update
+          apt-get -y upgrade
+          apt-get -y install rsync #for deploy
+          apt-get -y install libharfbuzz-dev libfribidi-dev #for pkgdown
+      - name: Install Package Dependencies
+        run: |-
+          Rscript -e "install.packages('remotes')"
+          Rscript -e "remotes::install_deps(dependencies = TRUE)"
+      # use several steps instead of build_site() because I don't want build_reference()
+      - name: Build pkgdown
+        run: |
+           PATH=$PATH:$HOME/bin/ Rscript -e 'pkgdown::build_site(".")'
+           PATH=$PATH:$HOME/bin/ Rscript -e 'rmarkdown::render(input="vignettes/session_lecture.Rmd", output_format = "beamer_presentation", output_file = "../docs/articles/session_lecture.pdf")'
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs # The folder the action should deploy.

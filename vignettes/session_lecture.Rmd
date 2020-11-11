@@ -1,0 +1,44 @@
+---
+title: 'Session N: What this lecture is about'
+author: "Levi Waldron"
+clean: false
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    df_print: paged
+    number_sections: yes
+    theme: lumen
+    toc: yes
+  beamer_presentation:
+    colortheme: dove
+    df_print: paged
+    fonttheme: structurebold
+    slide_level: 2
+    theme: Hannover
+  slidy_presentation: default
+  md_document:
+    preserve_yaml: false
+always_allow_html: true
+institute: CUNY SPH Biostatistics 2
+---
+
+# Learning objectives and outline
+
+## Learning objectives
+
+1. learning objective 1
+
+## Outline
+
+1. topic 1
+
+# Section 1 title
+
+## Slide 1 title
+
+Slide 1 content
+
+## Slide 2 title
+
+Slide 2 content

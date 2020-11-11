@@ -1,0 +1,25 @@
+---
+title: "Session N lab exercise: What it's about"
+author: "Levi Waldron"
+institute: "CUNY SPH Biostatistics 2"
+clean: false
+output:
+  html_document:
+    toc: yes
+    df_print: paged
+    theme: lumen
+    number_sections: yes
+  md_document:
+    preserve_yaml: false
+always_allow_html: true
+---
+
+**Learning objectives**
+
+1. Learning objective 1
+
+**Exercises**
+
+1. Exercise 1
+
+
