@@ -368,34 +368,3 @@ summary(mycox)
 * continue zzz
 
 
-# Immortal time bias
-
-## An example of immortal time bias
-
-* For example, Yee *et al.* reported that new statin users reported a 26% reduction in the risk of diabetes progression with one year or more of treatment relative to never-users (adjusted HR 0.74, 95% CI: 0.56 to 0.97).
-    + New users excludes those who had received a lipid lowering drug from three years before to six months after cohort entry
-* This is a surprising finding because of confounding: people whose diabetes progresses are more likely to develop cardiovascular disease, an indication for statins.
-    + would result in HR > 1
-* Why?
-
-\tiny
-
-* Yee *et al.* Statin use in type 2 diabetes mellitus is associated with a delay in starting insulin (http://onlinelibrary.wiley.com/doi/10.1111/j.1464-5491.2004.01263.x/full)
-
-## An example of immortal time bias
-
-* Why?
-    + all person days between cohort entry and end of follow-up were **classified as treated** for those who met the statin user definition, regardless of the date on which they met this definition and as untreated for non-users
-    + thus all persons in the *treated* group are "immortal" from time 0 until the initiation of statin treatment
-    + this period of immortality makes treatment look more effective
-
-## A solution: Time-dependent covariates (TDC)
-
-**Definition: A time-dependent covariate in a Cox model is a predictor whose values may vary with time.**
-
-* A solution is treating statin prescription as a Time Dependent Covariate (TDC) (Levesque 
-*et al.*)
-* Levesque *et al.* Problem of immortal time bias in cohort studies: example using statins for preventing progression of diabetes (https://doi.org/10.1136/bmj.b5087)
-
-
-
