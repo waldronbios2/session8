@@ -1,5 +1,5 @@
 ---
-title: "Session N lab exercise: What it's about"
+title: "Session 8 lab exercise: What it's about"
 author: "Levi Waldron"
 institute: "CUNY SPH Biostatistics 2"
 clean: false

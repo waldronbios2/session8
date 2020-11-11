@@ -1,12 +1,14 @@
-Package: sessionN
+Package: session8
 Type: Package
-Title: Lecture and lab materials for CUNY Biostatistics 2 session N
+Title: Lecture and lab materials for CUNY Biostatistics 2 session 8
 Version: 0.1.0
 Authors@R: person("Levi", "Waldron", , "lwaldron.research@gmail.com", role = c("aut", "cre"),
       comment = c(ORCID = "0000-0003-2725-0694"))
 Maintainer: Levi Waldron <lwaldron.research@gmail.com>
-Description: Description of this session
+Description: Survival analysis part 3
 Imports:
+    muhaz,
+    survminer,
     tidyverse
 Suggests:
     pkgdown,
@@ -15,5 +17,5 @@ Suggests:
 License: CC BY 4.0
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/waldronbios2/templatesession
+URL: https://github.com/waldronbios2/session8
 VignetteBuilder: knitr

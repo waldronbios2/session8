@@ -1,5 +1,5 @@
 <!-- badges: start -->
-[![Actions Status](https://github.com/waldronbios2/templatesession/workflows/build/badge.svg)](https://github.com/waldronbios2/templatesession/actions)
+[![Actions Status](https://github.com/waldronbios2/session8/workflows/build/badge.svg)](https://github.com/waldronbios2/templatesession/actions)
 <!-- badges: end -->
 
 # Session N: title
