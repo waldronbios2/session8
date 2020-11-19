@@ -97,13 +97,59 @@
 <h2 class="hasAnchor">
 <a href="#lecture" class="anchor"></a>Lecture</h2>
 <p><strong>Learning Objectives</strong></p>
+<ol>
+<li>Check model assumptions and fit of the Cox model
+<ul>
+<li>residuals analysis</li>
+<li>log-minus-log plot</li>
+</ul>
+</li>
+<li>Fit and interpret multivariate Cox models
+<ul>
+<li>perform tests for trend</li>
+<li>predict survival for specific covariate patterns</li>
+<li>predict survival for adjusted coefficients</li>
+</ul>
+</li>
+<li>Explain stratified analysis</li>
+<li>Identify situations of competing risks</li>
+<li>Describe the application of Propensity Score analysis</li>
+</ol>
+<ul>
+<li>Vittinghoff sections 6.2-6.4</li>
+</ul>
 <p><strong>Outline</strong></p>
+<ol>
+<li>Review</li>
+<li>Assumptions of Cox PH model</li>
+<li>Tests for trend</li>
+<li>Predictions for specific covariate patterns</li>
+<li>Stratification</li>
+<li>Competing risks</li>
+<li>Propensity Score analysis to control for confounding</li>
+</ol>
 </div>
 <div id="lab" class="section level2">
 <h2 class="hasAnchor">
 <a href="#lab" class="anchor"></a>Lab</h2>
 <p><strong>Learning Objectives</strong></p>
+<ol>
+<li>Make stratified and unstratified Kaplan-Meier plots</li>
+<li>Perform Cox proportional hazards regression</li>
+<li>Assess proportional hazards assumption</li>
+</ol>
 <p><strong>Exercises</strong></p>
+<ol>
+<li>Load the Primary Biliary Cirrhosis (pbc) dataset from the survival package</li>
+<li>Create a <code>Surv</code> object using variables “time” and “status”, add this to the pbc dataframe</li>
+<li>Plot a KM curve for all participants using <code><a href="http://www.sthda.com/english/rpkgs/survminer/">library(survminer)</a></code> function <code>ggsurvplot()</code>
+</li>
+<li>Stratify by treatment and add a p-value to this plot (see <code>?ggsurvplot</code>)</li>
+<li>Check whether these p-values correspond to results from a log-rank test</li>
+<li>Perform a Cox proportional hazards regression, using the “trt” variable as a predictor</li>
+<li>Create a log-minus-log plot to test the proportional hazards assumption</li>
+<li>Plot Schoenfeld residuals and perform Schoenfeld test for the above Cox model</li>
+</ol>
 </div>
 </div>
 
