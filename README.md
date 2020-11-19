@@ -2,7 +2,7 @@
 [![Actions Status](https://github.com/waldronbios2/session8/workflows/build/badge.svg)](https://github.com/waldronbios2/templatesession/actions)
 <!-- badges: end -->
 
-# Session N: title
+# Session 8: Survival Analysis 3
 
 ## Lecture
 
