@@ -199,8 +199,12 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 <li>Residuals are used to investigate the lack of fit of a model to a given subject.</li>
 <li>For Cox regression, there’s no easy analog to the usual “observed minus predicted” residual</li>
 </ul>
+</div>
+<div id="section" class="section level2">
+<h2></h2>
+
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://waldronlab.io/pensim">pensim</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://waldronlab.io/pensim">pensim</a></span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">mydat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://waldronlab.io/ProjectAsPackage/reference/create.data.html">create.data</a></span><span class="op">(</span>
   nvars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
@@ -210,18 +214,9 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
   firstonly <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,
   censoring <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8.5</span><span class="op">)</span>
 <span class="op">)</span><span class="op">$</span><span class="va">data</span></pre></div>
+<p>Rename variables of simulated data, and make one variable categorical:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co">## Rename variables of simulated data, and make one variable categorical.</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></pre></div>
-<pre><code>## 
-## Attaching package: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span><span class="op">)</span>
 <span class="va">mydat</span> <span class="op">&lt;-</span> <span class="va">mydat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>Var1 <span class="op">=</span> <span class="va">a.1</span>, Var2 <span class="op">=</span> <span class="va">b.1</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Var1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">Var1</span>,
                     breaks <span class="op">=</span> <span class="fl">2</span>,
@@ -232,7 +227,7 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 <h2 class="hasAnchor">
 <a href="#simulated-data-to-test-residuals-methods" class="anchor"></a>Simulated data to test residuals methods</h2>
 
-<div class="sourceCode" id="cb7"><pre class="downlit">
+<div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mydat</span><span class="op">)</span></pre></div>
 <pre><code>##    Var1          Var2               time           cens      
 ##  low :323   Min.   :-2.99695   Min.   :   5   Min.   :0.000  
@@ -245,10 +240,6 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 <div id="kaplan-meier-plot-of-simulated-data-stratified-by-var1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#kaplan-meier-plot-of-simulated-data-stratified-by-var1" class="anchor"></a>Kaplan-Meier plot of simulated data, stratified by Var1</h2>
-<pre><code>## Loading required package: ggplot2</code></pre>
-<pre><code>## Loading required package: ggpubr</code></pre>
-<pre><code>## Warning: Vectorized input to `element_text()` is not officially supported.
-## Results may be unexpected or may change in future versions of ggplot2.</code></pre>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div id="martingale-residuals" class="section level2">
@@ -350,13 +341,12 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 <div id="tests-for-trend" class="section level1">
 <h1 class="hasAnchor">
 <a href="#tests-for-trend" class="anchor"></a>Tests for trend</h1>
-</div>
-<div id="what-are-tests-for-trend" class="section level1">
-<h1 class="hasAnchor">
-<a href="#what-are-tests-for-trend" class="anchor"></a>What are tests for trend?</h1>
+<div id="what-are-tests-for-trend" class="section level2">
+<h2 class="hasAnchor">
+<a href="#what-are-tests-for-trend" class="anchor"></a>What are tests for trend?</h2>
 <ul>
-<li>For any kind of multivariate model including an ordinal variable</li>
-<li>Such as cancer stage (1, 2, 3, 4), age category, …
+<li>For models including an ordinal variable</li>
+<li>Such as PBC stage (1, 2, 3, 4), age category, …
 <ul>
 <li>Is there a linear / quadratic / cubic relationship between coefficients and their order?</li>
 <li>Test by LRT or Wald Test</li>
@@ -364,6 +354,18 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 </li>
 </ul>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+</div>
+<div id="fitting-a-test-for-trend-in-r" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fitting-a-test-for-trend-in-r" class="anchor"></a>Fitting a test for trend in R</h2>
+<ul>
+<li>Just define stage as an <em>ordered factor</em> and tests for trend are done automatically:</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="va">pbc.os</span> <span class="op">&lt;-</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">pbc.os</span>, stageordered <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">stage</span>, ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">stageordered</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>  </pre></div>
 <pre><code>## Call:
 ## coxph(formula = Surv(time, os) ~ stageordered, data = pbc.os)
 ## 
@@ -385,6 +387,8 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 ## Likelihood ratio test= 52.74  on 3 df,   p=2e-11
 ## Wald test            = 43.92  on 3 df,   p=2e-09
 ## Score (logrank) test = 53.85  on 3 df,   p=1e-11</code></pre>
+<p>Highly significant tests of overall fit by LRT, Wald, and logrank test.</p>
+</div>
 </div>
 <div id="predictions-for-specific-covariate-patterns" class="section level1">
 <h1 class="hasAnchor">
@@ -405,7 +409,7 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 <div id="predicted-survival-for-specific-covariate-patterns" class="section level2">
 <h2 class="hasAnchor">
 <a href="#predicted-survival-for-specific-covariate-patterns" class="anchor"></a>Predicted survival for specific covariate patterns</h2>
-<p><img src="session_lecture_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="session_lecture_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 </div>
 <div id="multivariate-regression" class="section level2">
 <h2 class="hasAnchor">
@@ -420,10 +424,10 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 </li>
 </ul>
 </div>
-<div id="section" class="section level2">
+<div id="section-1" class="section level2">
 <h2></h2>
 
-<div class="sourceCode" id="cb15"><pre class="downlit">
+<div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">edema</span>
              <span class="op">+</span> <span class="va">stage</span> <span class="op">+</span> <span class="va">arm</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></pre></div>
@@ -471,7 +475,7 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 </li>
 <li>Idea is to estimate hazard ratio in an unadjusted model:</li>
 </ul>
-<div class="sourceCode" id="cb17"><pre class="downlit">
+<div class="sourceCode" id="cb11"><pre class="downlit">
 <span class="va">unadjfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">stage</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">unadjfit</span><span class="op">)</span></pre></div>
 <pre><code>##   stage2   stage3   stage4 
@@ -483,7 +487,7 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 <ul>
 <li>and in an adjusted model:</li>
 </ul>
-<div class="sourceCode" id="cb19"><pre class="downlit">
+<div class="sourceCode" id="cb13"><pre class="downlit">
 <span class="va">adjfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">edema</span>
                 <span class="op">+</span> <span class="va">stage</span> <span class="op">+</span> <span class="va">arm</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">adjfit</span><span class="op">)</span></pre></div>
@@ -501,7 +505,7 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 \]</span>
 </li>
 </ul>
-<p><img src="session_lecture_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="session_lecture_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 </div>
 </div>
 <div id="stratification" class="section level1">
@@ -529,7 +533,7 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 <h2 class="hasAnchor">
 <a href="#how-to-stratify" class="anchor"></a>How to stratify</h2>
 <p><strong>Example - in R, strata() can be added to any model formula</strong> </p>
-<div class="sourceCode" id="cb21"><pre class="downlit">
+<div class="sourceCode" id="cb15"><pre class="downlit">
 <span class="va">mycox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html">strata</a></span><span class="op">(</span><span class="va">stage</span><span class="op">)</span>, 
                data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mycox</span><span class="op">)</span></pre></div>

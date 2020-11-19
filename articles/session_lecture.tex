@@ -302,7 +302,7 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 \section{Checking assumptions of Cox
 model}\label{checking-assumptions-of-cox-model}}
 
-\begin{frame}[fragile]{Residuals analysis}
+\begin{frame}{Residuals analysis}
 \protect\hypertarget{residuals-analysis}{}
 
 \begin{itemize}
@@ -315,11 +315,16 @@ model}\label{checking-assumptions-of-cox-model}}
   minus predicted'' residual
 \end{itemize}
 
-\footnotesize
+\end{frame}
+
+\begin{frame}[fragile]{}
+\protect\hypertarget{section}{}
+
+\tiny
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(pensim)}
+\KeywordTok{suppressPackageStartupMessages}\NormalTok{(}\KeywordTok{library}\NormalTok{(pensim))}
 \KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
 \NormalTok{mydat <-}\StringTok{ }\KeywordTok{create.data}\NormalTok{(}
   \DataTypeTok{nvars =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{),}
@@ -332,32 +337,11 @@ model}\label{checking-assumptions-of-cox-model}}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{## Rename variables of simulated data, and make one variable categorical.}
-\KeywordTok{library}\NormalTok{(dplyr)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## 
-## Attaching package: 'dplyr'
-\end{verbatim}
-
-\begin{verbatim}
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-\end{verbatim}
-
-\begin{verbatim}
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-\end{verbatim}
+Rename variables of simulated data, and make one variable categorical:
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\KeywordTok{suppressPackageStartupMessages}\NormalTok{(}\KeywordTok{library}\NormalTok{(dplyr))}
 \NormalTok{mydat <-}\StringTok{ }\NormalTok{mydat }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{Var1 =}\NormalTok{ a}\FloatTok{.1}\NormalTok{, }\DataTypeTok{Var2 =}\NormalTok{ b}\FloatTok{.1}\NormalTok{) }\OperatorTok{%>%}
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Var1 =} \KeywordTok{cut}\NormalTok{(Var1,}
                     \DataTypeTok{breaks =} \DecValTok{2}\NormalTok{,}
@@ -391,22 +375,8 @@ model}\label{checking-assumptions-of-cox-model}}
 
 \end{frame}
 
-\begin{frame}[fragile]{Kaplan-Meier plot of simulated data, stratified
-by Var1}
+\begin{frame}{Kaplan-Meier plot of simulated data, stratified by Var1}
 \protect\hypertarget{kaplan-meier-plot-of-simulated-data-stratified-by-var1}{}
-
-\begin{verbatim}
-## Loading required package: ggplot2
-\end{verbatim}
-
-\begin{verbatim}
-## Loading required package: ggpubr
-\end{verbatim}
-
-\begin{verbatim}
-## Warning: Vectorized input to `element_text()` is not officially supported.
-## Results may be unexpected or may change in future versions of ggplot2.
-\end{verbatim}
 
 \includegraphics{../docs/articles/session_lecture_files/figure-beamer/unnamed-chunk-4-1.pdf}
 
@@ -583,17 +553,15 @@ by Var1}
 \hypertarget{tests-for-trend}{%
 \section{Tests for trend}\label{tests-for-trend}}
 
-\hypertarget{what-are-tests-for-trend}{%
-\section{What are tests for trend?}\label{what-are-tests-for-trend}}
-
-\begin{frame}[fragile]{What are tests for trend?}
+\begin{frame}{What are tests for trend?}
+\protect\hypertarget{what-are-tests-for-trend}{}
 
 \begin{itemize}
 \tightlist
 \item
-  For any kind of multivariate model including an ordinal variable
+  For models including an ordinal variable
 \item
-  Such as cancer stage (1, 2, 3, 4), age category, \ldots{}
+  Such as PBC stage (1, 2, 3, 4), age category, \ldots{}
 
   \begin{itemize}
   \tightlist
@@ -606,6 +574,29 @@ by Var1}
 \end{itemize}
 
 \includegraphics{../docs/articles/session_lecture_files/figure-beamer/unnamed-chunk-13-1.pdf}
+
+\end{frame}
+
+\begin{frame}[fragile]{Fitting a test for trend in R}
+\protect\hypertarget{fitting-a-test-for-trend-in-r}{}
+
+\begin{itemize}
+\tightlist
+\item
+  Just define stage as an \emph{ordered factor} and tests for trend are
+  done automatically:
+\end{itemize}
+
+\tiny
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pbc.os <-}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(pbc.os, }\DataTypeTok{stageordered =} \KeywordTok{factor}\NormalTok{(stage, }\DataTypeTok{ordered =} \OtherTok{TRUE}\NormalTok{))}
+\NormalTok{fit <-}\StringTok{ }\KeywordTok{coxph}\NormalTok{(}\KeywordTok{Surv}\NormalTok{(time, os) }\OperatorTok{~}\StringTok{ }\NormalTok{stageordered, }\DataTypeTok{data =}\NormalTok{ pbc.os)}
+\KeywordTok{summary}\NormalTok{(fit)  }
+\end{Highlighting}
+\end{Shaded}
 
 \begin{verbatim}
 ## Call:
@@ -630,6 +621,8 @@ by Var1}
 ## Wald test            = 43.92  on 3 df,   p=2e-09
 ## Score (logrank) test = 53.85  on 3 df,   p=1e-11
 \end{verbatim}
+
+Highly significant tests of overall fit by LRT, Wald, and logrank test.
 
 \end{frame}
 
@@ -663,7 +656,7 @@ patterns}\label{predictions-for-specific-covariate-patterns}}
 \begin{frame}{Predicted survival for specific covariate patterns}
 \protect\hypertarget{predicted-survival-for-specific-covariate-patterns}{}
 
-\includegraphics{../docs/articles/session_lecture_files/figure-beamer/unnamed-chunk-14-1.pdf}
+\includegraphics{../docs/articles/session_lecture_files/figure-beamer/unnamed-chunk-15-1.pdf}
 
 \end{frame}
 
@@ -689,7 +682,7 @@ patterns}\label{predictions-for-specific-covariate-patterns}}
 \end{frame}
 
 \begin{frame}[fragile]{}
-\protect\hypertarget{section}{}
+\protect\hypertarget{section-1}{}
 
 \tiny
 
@@ -812,7 +805,7 @@ patterns}\label{predictions-for-specific-covariate-patterns}}
   \]
 \end{itemize}
 
-\includegraphics{../docs/articles/session_lecture_files/figure-beamer/unnamed-chunk-18-1.pdf}
+\includegraphics{../docs/articles/session_lecture_files/figure-beamer/unnamed-chunk-19-1.pdf}
 
 \end{frame}
 
