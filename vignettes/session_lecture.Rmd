@@ -88,9 +88,11 @@ $$
 * Residuals are used to investigate the lack of fit of a model to a given subject. 
 * For Cox regression, there’s no easy analog to the usual "observed minus predicted" residual
 
-\footnotesize
+##  
+
+\tiny
 ```{r}
-library(pensim)
+suppressPackageStartupMessages(library(pensim))
 set.seed(1)
 mydat <- create.data(
   nvars = c(1, 1),
@@ -102,9 +104,9 @@ mydat <- create.data(
 )$data
 ```
 
-```{r, echo=TRUE}
-## Rename variables of simulated data, and make one variable categorical.
-library(dplyr)
+Rename variables of simulated data, and make one variable categorical:
+```{r}
+suppressPackageStartupMessages(library(dplyr))
 mydat <- mydat %>% rename(Var1 = a.1, Var2 = b.1) %>%
   mutate(Var1 = cut(Var1,
                     breaks = 2,
@@ -122,11 +124,13 @@ summary(mydat)
 
 ## Kaplan-Meier plot of simulated data, stratified by Var1
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 ##Do Kaplan-Meier plot
 par(cex = 1.5)
-library(survival)
-library(survminer)
+suppressPackageStartupMessages({
+  library(survival)
+  library(survminer)
+})
 kmfit <- survfit(Surv(time, cens) ~ Var1, data = mydat)
 ggsurvplot(kmfit, risk.table = TRUE, linetype = 1:2)
 ```
@@ -262,10 +266,10 @@ survminer::ggsurvplot(fit, risk.table = TRUE, linetype = 1:2)
 
 # Tests for trend
 
-# What are tests for trend?
+## What are tests for trend?
 
-* For any kind of multivariate model including an ordinal variable
-* Such as cancer stage (1, 2, 3, 4), age category, ...
+* For models including an ordinal variable
+* Such as PBC stage (1, 2, 3, 4), age category, ...
     + Is there a linear / quadratic / cubic relationship between coefficients and their order?
     + Test by LRT or Wald Test
 
@@ -282,12 +286,22 @@ plot(
   ylab = "Coefficient, ie ln(HR)",
   xlim = c(1, 4)
 )
-## In R, just define stage as an ordered factor and tests for trend are done automatically:
+```
+
+## Fitting a test for trend in R
+
+* Just define stage as an _ordered factor_ and tests for trend are done automatically:
+
+\tiny
+
+```{r}
 pbc.os <-
   mutate(pbc.os, stageordered = factor(stage, ordered = TRUE))
 fit <- coxph(Surv(time, os) ~ stageordered, data = pbc.os)
-summary(fit)  ##highly significant tests of overall fit by LRT, Wald, and logrank test.
+summary(fit)  
 ```
+Highly significant tests of overall fit by LRT, Wald, and logrank test.
+
 
 # Predictions for specific covariate patterns
 
