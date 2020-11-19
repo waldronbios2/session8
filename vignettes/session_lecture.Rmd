@@ -3,19 +3,19 @@ title: 'Session 8: Survival analysis part 3'
 author: "Levi Waldron"
 clean: false
 output:
-  pdf_document:
-    toc: yes
-  html_document:
-    df_print: paged
-    number_sections: yes
-    theme: lumen
-    toc: yes
   beamer_presentation:
     colortheme: dove
     df_print: paged
     fonttheme: structurebold
     slide_level: 2
     theme: Hannover
+  html_document:
+    df_print: paged
+    number_sections: yes
+    theme: lumen
+    toc: yes
+  pdf_document:
+    toc: yes
   slidy_presentation: default
   md_document:
     preserve_yaml: false
@@ -34,10 +34,10 @@ institute: CUNY SPH Biostatistics 2
     + perform tests for trend
     + predict survival for specific covariate patterns
     + predict survival for adjusted coefficients
+3. Explain stratified analysis
+4. Identify situations of competing risks
+5. Describe the application of Propensity Score analysis
 
-3. Explain and perform stratified analysis and its use
-4. Explain time-dependent covariates and when to use them
-    
 * Vittinghoff sections 6.2-6.4
 
 ## Outline
@@ -47,8 +47,8 @@ institute: CUNY SPH Biostatistics 2
 3. Tests for trend
 4. Predictions for specific covariate patterns
 5. Stratification
-6. Propensity Score analysis to control for confounding
-7. Immortal time bias in observational studies
+6. Competing risks
+7. Propensity Score analysis to control for confounding
 
 # Review
 
@@ -124,8 +124,8 @@ ggsurvplot(kmfit, risk.table = TRUE, linetype=1:2)
 ## Martingale residuals
 
 * censoring variable $c_i$ (1 if event, 0 if censored) minus the estimated cumulative hazard function $H(t_i, X_i, \beta_i)$ (1 - survival function)
-    + E.g., for a subject censored at 1 year ($c_i=0$), whose predicted cumulative hazard at 1 year was 30\%, Martingale = 0 - 0.30 = -0.30.
-    + E.g. for a subject who had an event at 6 months, and whose predicted cumulative hazard at 6 months was 80%, Margingale = 1 - 0.8 = 0.2.
+    + E.g., for a subject censored at 1 year ($c_i=0$), whose predicted cumulative hazard at 1 year was 30\%, Martingale = $0 - 0.30 = -0.30$.
+    + E.g. for a subject who had an event at 6 months, and whose predicted cumulative hazard at 6 months was 80%, Margingale = $1 - 0.8 = 0.2$.
 
 * Problem: not symmetrically distributed, even when model fits the data well
 
@@ -212,25 +212,26 @@ ggsurvplot(kmfit, fun="cloglog")
 
 ```{r, echo=FALSE, message=FALSE}
 ## Data cleaning
-pbc <- read.csv("PBC.csv", row.names=1)
-pbc.os <- pbc[!is.na(pbc$time) & !is.na(pbc$status) & !is.na(pbc$trt), ]
-pbc.os$os <- pbc.os$status==2
-pbc.os <- pbc.os[!is.na(pbc.os$status), ]
-pbc.os$arm <- factor(pbc.os$trt, levels=2:1, labels=c("placebo", "treatment"))
-pbc.os$ascites <- factor(pbc.os$ascites)
-pbc.os$hepato <- factor(pbc.os$hepato)
-pbc.os$spiders <- factor(pbc.os$spiders)
-pbc.os$edema <- factor(pbc.os$edema)
-pbc.os$stage <- factor(pbc.os$stage)
+data(pbc)
+library(dplyr)
+pbc.os <- pbc %>%
+  filter(complete.cases(time, status, trt)) %>%
+  mutate(os = status==2) %>%
+  mutate(arm = factor(trt, levels=2:1, labels=c("placebo", "treatment")),
+         ascites = factor(ascites),
+         hepato = factor(hepato),
+         spiders = factor(spiders),
+         edema = factor(edema),
+         stage = factor(stage))
 ```
 
 ```{r, message=FALSE, echo=FALSE}
 ##KM plot of PBC data
-par(cex=1.5)
+par(cex = 1.5)
 library(survival)
-fit <- survfit(Surv(time/365, os) ~ arm, data=pbc.os)
+fit <- survfit(Surv(time / 365, os) ~ arm, data = pbc.os)
 survminer::ggsurvplot(fit)
-survminer::ggsurvplot(fit, risk.table = TRUE, linetype=1:2)
+survminer::ggsurvplot(fit, risk.table = TRUE, linetype = 1:2)
 ```
 
 
@@ -244,15 +245,22 @@ survminer::ggsurvplot(fit, risk.table = TRUE, linetype=1:2)
     + Test by LRT or Wald Test
 
 ```{r, echo=FALSE}
-par(cex=2)
+par(cex = 2)
 ## This is a manual way to plot the trend.
-fit <- coxph(Surv(time, os) ~ stage, data=pbc.os)
+fit <- coxph(Surv(time, os) ~ stage, data = pbc.os)
 stagecoefs <- c(0, coef(fit)[c("stage2", "stage3", "stage4")])
-plot(x=1:4, y=stagecoefs, type="b", xlab="Stages 2, 3, 4 (1=ref)", 
-     ylab="Coefficient, ie ln(HR)", xlim=c(1, 4))
+plot(
+  x = 1:4,
+  y = stagecoefs,
+  type = "b",
+  xlab = "Stages 2, 3, 4 (1=ref)",
+  ylab = "Coefficient, ie ln(HR)",
+  xlim = c(1, 4)
+)
 ## In R, just define stage as an ordered factor and tests for trend are done automatically:
-pbc.os$stageordered <- factor(pbc.os$stage, ordered=TRUE)
-fit <- coxph(Surv(time, os) ~ stageordered, data=pbc.os)
+pbc.os <-
+  mutate(pbc.os, stageordered = factor(stage, ordered = TRUE))
+fit <- coxph(Surv(time, os) ~ stageordered, data = pbc.os)
 summary(fit)  ##highly significant tests of overall fit by LRT, Wald, and logrank test.
 ```
 
@@ -268,14 +276,32 @@ summary(fit)  ##highly significant tests of overall fit by LRT, Wald, and logran
 ## Predicted survival for specific covariate patterns
 
 ```{r, echo=FALSE}
-par(cex=1.5)
-fit <- coxph(Surv(time, os) ~ stage, data=pbc.os)
+par(cex = 1.5)
+fit <- coxph(Surv(time, os) ~ stage, data = pbc.os)
 ##HR for each stage, relative to overall
-HR <- predict(fit, newdata=data.frame(stage=factor(1:4)))
-plot(survfit(fit)$time, survfit(fit)$surv, type="l", xlab="Time (days)", ylab="Survival Probability")
+HR <- predict(fit, newdata = data.frame(stage = factor(1:4)))
+plot(
+  survfit(fit)$time,
+  survfit(fit)$surv,
+  type = "l",
+  xlab = "Time (days)",
+  ylab = "Survival Probability"
+)
 for (i in 1:4)
-  lines(survfit(fit)$time, (survfit(fit)$surv)^exp(HR[i]), type="l", col=i+1, lty=i+1)
-legend("bottomleft", legend=c("Overall", "Stage 1", "Stage 2", "Stage 3", "Stage 4"), col=1:5, lty=1:5, bty="n")
+  lines(
+    survfit(fit)$time,
+    (survfit(fit)$surv) ^ exp(HR[i]),
+    type = "l",
+    col = i + 1,
+    lty = i + 1
+  )
+legend(
+  "bottomleft",
+  legend = c("Overall", "Stage 1", "Stage 2", "Stage 3", "Stage 4"),
+  col = 1:5,
+  lty = 1:5,
+  bty = "n"
+)
 ```
 
 ## Multivariate regression
@@ -285,12 +311,12 @@ legend("bottomleft", legend=c("Overall", "Stage 1", "Stage 2", "Stage 3", "Stage
     + testing for mediation
     + testing for interaction
 
-## Multivariate regression
+##   
 
-\footnotesize
+\tiny
 ```{r}
-fit <- coxph(Surv(time, os) ~ age + sex + edema 
-                + stage + arm, data=pbc.os)
+fit <- coxph(Surv(time, os) ~ age + sex + edema
+             + stage + arm, data = pbc.os)
 summary(fit)
 ```
 
@@ -302,7 +328,7 @@ summary(fit)
 
 \footnotesize
 ```{r}
-unadjfit <- coxph(Surv(time, os) ~ stage, data=pbc.os)
+unadjfit <- coxph(Surv(time, os) ~ stage, data = pbc.os)
 coef(unadjfit)
 ```
 
@@ -312,8 +338,8 @@ coef(unadjfit)
 
 \footnotesize
 ```{r}
-adjfit <- coxph(Surv(time, os) ~ age + sex + edema 
-                + stage + arm, data=pbc.os)
+adjfit <- coxph(Surv(time, os) ~ age + sex + edema
+                + stage + arm, data = pbc.os)
 coef(adjfit)
 ```
 
@@ -325,15 +351,38 @@ $$
 $$
 
 ```{r, echo=FALSE}
-par(cex=1.5)
-basefit <- survfit(unadjfit, newdata=data.frame(stage=factor(1)))
-plot(x=basefit$time, y=basefit$surv, type="l", ylim=c(0, 1), xlab="Time", ylab="Survival Probability")
-stage4unadj <- (basefit$surv)^(exp(coef(unadjfit)["stage4"]))
-stage4adj <- (basefit$surv)^(exp(coef(adjfit)["stage4"]))
-lines(x=basefit$time, y=stage4adj, col="red", lty=1, lw=2)
-lines(x=basefit$time, y=stage4unadj, col="blue", lty=3)
-legend("bottomleft", legend=c("Stage 1", "Stage 4 adjusted", "Stage 4 unadjusted"),
-       col=c("black", "red", "blue"), lw=c(1,2,1), lty=c(1,1,3))
+par(cex = 1.5)
+basefit <- survfit(unadjfit, newdata = data.frame(stage = factor(1)))
+plot(
+  x = basefit$time,
+  y = basefit$surv,
+  type = "l",
+  ylim = c(0, 1),
+  xlab = "Time",
+  ylab = "Survival Probability"
+)
+stage4unadj <- (basefit$surv) ^ (exp(coef(unadjfit)["stage4"]))
+stage4adj <- (basefit$surv) ^ (exp(coef(adjfit)["stage4"]))
+lines(
+  x = basefit$time,
+  y = stage4adj,
+  col = "red",
+  lty = 1,
+  lw = 2
+)
+lines(
+  x = basefit$time,
+  y = stage4unadj,
+  col = "blue",
+  lty = 3
+)
+legend(
+  "bottomleft",
+  legend = c("Stage 1", "Stage 4 adjusted", "Stage 4 unadjusted"),
+  col = c("black", "red", "blue"),
+  lw = c(1, 2, 1),
+  lty = c(1, 1, 3)
+)
 ```
 
 # Stratification
@@ -356,15 +405,87 @@ legend("bottomleft", legend=c("Stage 1", "Stage 4 adjusted", "Stage 4 unadjusted
 **Example - in R, strata() can be added to any model formula**
 \footnotesize
 ```{r}
-mycox <- coxph(Surv(time, os) ~ trt + strata(stage), data=pbc.os)
+mycox <- coxph(Surv(time, os) ~ trt + strata(stage), 
+               data = pbc.os)
 summary(mycox)
 ```
+
+# Competing Risks Data
+
+## What are competing risks?
+
+* Example from Vittinghoff 6.5: The MrOS study (Orwoll et al. 2005) followed men over 65 to examine predictors of bone fracture and low BMD (subclinical bone loss)
+* At end of study participants had:
+    + developed fracture (outcome of interest),
+    + remained alive without fracture (incomplete follow-up), or
+    + died prior to fracture (incomplete follow-up)
+
+\tiny Orwoll, E. _et al._ (2005). Design and baseline characteristics of the osteoporotic fractures in men (MrOS) study–a large observational study of the determinants of fracture in older men. Contemporary Clinical Trials, 26(5), 569–585.
+
+## Why not treat died prior to fracture and alive without fracture as censored?
+
+* Recall the independent censoring assumption (Vittinghoff 6.6.4):
+    + censored people are similar to those who remain at risk in terms of developing the event of interest;
+    + censoring is independent of the event of interest.
+    + For patients who died this assumption is highly suspect
+
+## Reasons for right censored data
+
+* Cut-off date of analysis (administrative censoring): 
+    + Censoring usually independent
+* Loss to follow-up
+    + Independence may be problematic if sicker individuals discontinue participant in study (lack of energy, too ill, return to home country)
+    + or if healthier individuals discontinue participation (don't feel the need to continue, start new life in other country)
+* Competing risks: 
+    + Often informative. 
+    + In competing risks analysis, independence between competing risks is not required
+
+## Very brief summary of competing risk methods
+
+* 1-to-1 mapping between hazard and cumulative incidence function is lost in competing risks
+* Standard Kaplan-Meier estimator is biased for competing risks data
+    + Aalen-Johansen estimator is better choice
+* _Gary's test_ is analogous to log-rank test
+* cause-specific standard Cox PH model might be useful for prognostic (causal) testing, but not estimating a population Hazard Ratio
+
+## Resources for competing risk methods
+
+* Z. Zhang, Survival analysis in the presence of competing risks, Ann Transl Med. 2017 Feb; 5(3): 47. PMID: [28251126](https://www.ncbi.nlm.nih.gov/pubmed/28251126)
+* [cmprsk](https://CRAN.R-project.org/package=cmprsk) package
+* [riskRegression](https://cran.r-project.org/package=riskRegression) package
 
 # Propensity score analysis
 
 ## What is propensity score analysis?
 
-* an alternative to multivariate regression to control for hypothesized confounders
-* continue zzz
+* an alternative to multivariate regression to control for hypothesized confounders in observational studies:
 
+```
+outcome ~ exposure + counfounder1 + confounder2
+```
 
+* a stratification approach that is more practical than stratifying on multiple hypothesized confounders
+* an approach to summarizing many covariates into a single score
+* a convenient approach to controlling for many hypothesized confounders
+
+## Propensity score approach to correction for confounders
+
+* *Step 1*: fit the propensity score model (no outcome) that predicts propensity for exposure based on confounders:
+```
+exposure ~ counfounder1 + confounder2
+```
+
+* *Step 2*: use propensity predictions to match or stratify participants with similar propensity (for example, stratifying on quintiles of propensity)
+
+* *Step 3*: check adequacy of matching or stratification, ie by comparing attributes of matched participants 
+
+* *Step 4*: test hypothesis _among matched participants_:
+```
+outcome ~ exposure
+```
+
+## Propensity score references
+
+* P.C. Austin (2011), An Introduction to Propensity Score Methods for Reducing the Effects of Confounding in Observational Studies. Multivariate Behavioral Research, 46:3, 399-424, DOI: [10.1080/00273171.2011.568786](http://dx.doi.org/10.1080/00273171.2011.568786)
+* R. d’Agostino (1998), Tutorial in Biostatistics: propensity score methods for bias reduction in the comparison of a treatment to a non-randomized control group. Stat. Med. 17, 2265-2281. [http://www.stat.ubc.ca/~john/papers/DAgostinoSIM1998.pdf](http://www.stat.ubc.ca/~john/papers/DAgostinoSIM1998.pdf)
+* You don't need any special package to do basic propensity score matching (e.g. stratifying by quintiles), but the [MatchIt](https://cran.r-project.org/package=MatchIt) package provides multiple matching approaches, diagnostics, good documentation
