@@ -315,19 +315,50 @@ model}\label{checking-assumptions-of-cox-model}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(pensim); }\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
-\NormalTok{mydat <-}\StringTok{ }\KeywordTok{create.data}\NormalTok{(}\DataTypeTok{nvars=}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{), }\DataTypeTok{nsamples=}\DecValTok{500}\NormalTok{, }
-    \DataTypeTok{cors=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{), }\DataTypeTok{associations=}\KeywordTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.5}\NormalTok{), }
-    \DataTypeTok{firstonly=}\KeywordTok{c}\NormalTok{(}\OtherTok{TRUE}\NormalTok{, }\OtherTok{TRUE}\NormalTok{), }\DataTypeTok{censoring=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{8.5}\NormalTok{))}\OperatorTok{$}\NormalTok{data}
+\KeywordTok{library}\NormalTok{(pensim)}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{mydat <-}\StringTok{ }\KeywordTok{create.data}\NormalTok{(}
+  \DataTypeTok{nvars =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+  \DataTypeTok{nsamples =} \DecValTok{500}\NormalTok{,}
+  \DataTypeTok{cors =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{),}
+  \DataTypeTok{associations =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.5}\NormalTok{),}
+  \DataTypeTok{firstonly =} \KeywordTok{c}\NormalTok{(}\OtherTok{TRUE}\NormalTok{, }\OtherTok{TRUE}\NormalTok{),}
+  \DataTypeTok{censoring =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{8.5}\NormalTok{)}
+\NormalTok{)}\OperatorTok{$}\NormalTok{data}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{## Rename variables of simulated data, and make one variable categorical.}
-\KeywordTok{colnames}\NormalTok{(mydat)[}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{] <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Var1"}\NormalTok{, }\StringTok{"Var2"}\NormalTok{)}
-\NormalTok{mydat}\OperatorTok{$}\NormalTok{Var1 <-}\StringTok{ }\KeywordTok{cut}\NormalTok{(mydat}\OperatorTok{$}\NormalTok{Var1, }\DataTypeTok{breaks=}\DecValTok{2}\NormalTok{, }\DataTypeTok{labels=}\KeywordTok{c}\NormalTok{(}\StringTok{"low"}\NormalTok{, }\StringTok{"high"}\NormalTok{))}
-\NormalTok{mydat}\OperatorTok{$}\NormalTok{time <-}\StringTok{ }\KeywordTok{ceiling}\NormalTok{(mydat}\OperatorTok{$}\NormalTok{time}\OperatorTok{*}\DecValTok{1000}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mydat <-}\StringTok{ }\NormalTok{mydat }\OperatorTok{%>%}\StringTok{ }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{Var1 =}\NormalTok{ a}\FloatTok{.1}\NormalTok{, }\DataTypeTok{Var2 =}\NormalTok{ b}\FloatTok{.1}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Var1 =} \KeywordTok{cut}\NormalTok{(Var1,}
+                    \DataTypeTok{breaks =} \DecValTok{2}\NormalTok{,}
+                    \DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"low"}\NormalTok{, }\StringTok{"high"}\NormalTok{)),}
+         \DataTypeTok{time =} \KeywordTok{ceiling}\NormalTok{(time }\OperatorTok{*}\StringTok{ }\DecValTok{1000}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
