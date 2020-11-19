@@ -89,17 +89,26 @@ $$
 
 \footnotesize
 ```{r}
-library(pensim); set.seed(1)
-mydat <- create.data(nvars=c(1, 1), nsamples=500, 
-    cors=c(0, 0), associations=c(0.5, 0.5), 
-    firstonly=c(TRUE, TRUE), censoring=c(0, 8.5))$data
+library(pensim)
+set.seed(1)
+mydat <- create.data(
+  nvars = c(1, 1),
+  nsamples = 500,
+  cors = c(0, 0),
+  associations = c(0.5, 0.5),
+  firstonly = c(TRUE, TRUE),
+  censoring = c(0, 8.5)
+)$data
 ```
 
 ```{r, echo=TRUE}
 ## Rename variables of simulated data, and make one variable categorical.
-colnames(mydat)[1:2] <- c("Var1", "Var2")
-mydat$Var1 <- cut(mydat$Var1, breaks=2, labels=c("low", "high"))
-mydat$time <- ceiling(mydat$time*1000)
+library(dplyr)
+mydat <- mydat %>% rename(Var1 = a.1, Var2 = b.1) %>%
+  mutate(Var1 = cut(Var1,
+                    breaks = 2,
+                    labels = c("low", "high")),
+         time = ceiling(time * 1000))
 ```
 
 ## Simulated data to test residuals methods
@@ -114,11 +123,11 @@ summary(mydat)
 
 ```{r, echo=FALSE}
 ##Do Kaplan-Meier plot
-par(cex=1.5)
+par(cex = 1.5)
 library(survival)
 library(survminer)
-kmfit <- survfit(Surv(time, cens)~Var1, data=mydat)
-ggsurvplot(kmfit, risk.table = TRUE, linetype=1:2)
+kmfit <- survfit(Surv(time, cens) ~ Var1, data = mydat)
+ggsurvplot(kmfit, risk.table = TRUE, linetype = 1:2)
 ```
 
 ## Martingale residuals
@@ -131,12 +140,12 @@ ggsurvplot(kmfit, risk.table = TRUE, linetype=1:2)
 
 ## Martingale residuals in simulated data
 ```{r, echo=FALSE}
-fitsim <- coxph(Surv(time, cens) ~ Var1 + Var2, data=mydat)
-par(cex=1.5)
+fitsim <- coxph(Surv(time, cens) ~ Var1 + Var2, data = mydat)
+par(cex = 1.5)
 plot(mydat$time, resid(fitsim),
-     xlab="Time", ylab="Martingale Residuals")
-abline(h=0, lty=2)
-lines(lowess(mydat$time, resid(fitsim)), col='red')
+     xlab = "Time", ylab = "Martingale Residuals")
+abline(h = 0, lty = 2)
+lines(lowess(mydat$time, resid(fitsim)), col = 'red')
 ```
 
 ## Deviance residuals in simulated data
@@ -145,11 +154,13 @@ lines(lowess(mydat$time, resid(fitsim)), col='red')
 * Should be more symmetrically distributed about zero?
 * Observations with large deviance residuals are poorly predicted by the model
 ```{r, echo=FALSE}
-par(cex=1.5)
-plot(mydat$time, resid(fitsim, type="deviance"),
-     xlab="Time", ylab="Deviance Residuals")
-abline(h=0, lty=2)
-lines(lowess(mydat$time, resid(fitsim)),col='red')
+par(cex = 1.5)
+plot(mydat$time,
+     resid(fitsim, type = "deviance"),
+     xlab = "Time",
+     ylab = "Deviance Residuals")
+abline(h = 0, lty = 2)
+lines(lowess(mydat$time, resid(fitsim)), col = 'red')
 ```
 
 ## Schoenfeld residuals
@@ -163,9 +174,9 @@ lines(lowess(mydat$time, resid(fitsim)),col='red')
 
 ```{r, echo=FALSE}
 fitzph <- cox.zph(fitsim)
-par(mfrow=c(1,2), cex=1.5)
-plot(fitzph, var=1)
-plot(fitzph, var=2)
+par(mfrow = c(1, 2), cex = 1.5)
+plot(fitzph, var = 1)
+plot(fitzph, var = 2)
 ```
 
 ## Schoenfeld test for proportional hazards
@@ -183,13 +194,26 @@ fitzph
 ## The hazard function h(t), stratified by Var1
 
 ```{r, echo=FALSE}
-par(cex=1.5)
+par(cex = 1.5)
 library(muhaz)
-hazhigh = with(mydat[mydat$Var1=="high", ], muhaz(time, cens))
-hazlow = with(mydat[mydat$Var1=="low", ], muhaz(time, cens))
-plot(hazlow, lwd=2, ylim=c(0, 0.002), xlab="Follow-up time")
-lines(hazhigh, lty=2, lwd=2, col="red")
-legend("topleft", legend=c("Var1 = low", "Var1 = high"), lty=1:2, lwd=2, col=c("black", "red"), bty='n')
+hazhigh = with(mydat[mydat$Var1 == "high",], muhaz(time, cens))
+hazlow = with(mydat[mydat$Var1 == "low",], muhaz(time, cens))
+plot(hazlow,
+     lwd = 2,
+     ylim = c(0, 0.002),
+     xlab = "Follow-up time")
+lines(hazhigh,
+      lty = 2,
+      lwd = 2,
+      col = "red")
+legend(
+  "topleft",
+  legend = c("Var1 = low", "Var1 = high"),
+  lty = 1:2,
+  lwd = 2,
+  col = c("black", "red"),
+  bty = 'n'
+)
 ```
 
 ## Log-minus-log plot
