@@ -9,6 +9,7 @@ Description: Survival analysis part 3
 Imports:
     muhaz,
     survminer,
+    pensim,
     tidyverse
 Suggests:
     pkgdown,
