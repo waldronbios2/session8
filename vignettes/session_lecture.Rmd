@@ -79,7 +79,8 @@ $$
     + Constant hazard ratio over time (proportional hazards)
     + Linear association between log(HR) and predictors (log-linearity) / multiplicative relationship between hazard and predictors
     + Independence of survival times between individuals in the sample
-
+    + Uninformative censoring: a censored participant is the same as an uncensored participant with the same covariates at still in the risk set after that time
+    
 # Checking assumptions of Cox model
 
 ## Residuals analysis
