@@ -268,7 +268,7 @@ survminer::ggsurvplot(fit, risk.table = TRUE, linetype = 1:2)
 
 ## What are tests for trend?
 
-* For models including an ordinal variable
+* For models including an ordinal variablepush 
 * Such as PBC stage (1, 2, 3, 4), age category, ...
     + Is there a linear / quadratic / cubic relationship between coefficients and their order?
     + Test by LRT or Wald Test
@@ -282,7 +282,7 @@ plot(
   x = 1:4,
   y = stagecoefs,
   type = "b",
-  xlab = "Stages 2, 3, 4 (1=ref)",
+  xlab = "PBC stages 2, 3, 4 (1=ref)",
   ylab = "Coefficient, ie ln(HR)",
   xlim = c(1, 4)
 )
