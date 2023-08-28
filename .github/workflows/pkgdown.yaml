@@ -2,8 +2,8 @@ name: build
 on: push
 jobs:
   build:
-    runs-on: ubuntu-18.04
-    container: rocker/verse:4.0.2
+    runs-on: ubuntu-22.04
+    container: rocker/verse:latest
     steps:
       - name: trigger action on main site
         run: |
