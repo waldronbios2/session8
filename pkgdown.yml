@@ -1,10 +1,10 @@
-pandoc: 2.7.3
-pkgdown: 1.6.1
+pandoc: 3.1.1
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   session_lab: session_lab.html
   session_lecture: session_lecture.html
-last_built: 2020-11-20T00:16Z
+last_built: 2023-08-28T14:26Z
 urls:
   reference: https://bios2.waldronlab.io/reference
   article: https://bios2.waldronlab.io/articles

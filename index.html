@@ -25,6 +25,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,14 +39,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">session8</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Lecture and Lab
      
     <span class="caret"></span>
@@ -57,23 +59,23 @@
       <a href="articles/session_lecture.pdf">Lecture notes PDF</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="articles/session_lab.html">Lab materials</a>
     </li>
   </ul>
 </li>
-<li class="dropdown-header">
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/waldronbios2/session8/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/waldronbios2/session8/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://twitter.com/leviwaldron1">
-    <span class="fab fa fab fa-twitter fa-lg"></span>
+  <a href="https://twitter.com/leviwaldron1" class="external-link">
+    <span class="fab fa-twitter fa-lg"></span>
      
   </a>
 </li>
@@ -91,13 +93,13 @@
   <div class="contents col-md-9">
 
 
-<div id="session-8-survival-analysis-3" class="section level1">
+<div class="section level1">
 
-<div id="lecture" class="section level2">
-<h2 class="hasAnchor">
-<a href="#lecture" class="anchor"></a>Lecture</h2>
+<div class="section level2">
+<h2 id="lecture">Lecture<a class="anchor" aria-label="anchor" href="#lecture"></a>
+</h2>
 <p><strong>Learning Objectives</strong></p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>Check model assumptions and fit of the Cox model
 <ul>
 <li>residuals analysis</li>
@@ -119,7 +121,7 @@
 <li>Vittinghoff sections 6.2-6.4</li>
 </ul>
 <p><strong>Outline</strong></p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>Review</li>
 <li>Assumptions of Cox PH model</li>
 <li>Tests for trend</li>
@@ -129,20 +131,20 @@
 <li>Propensity Score analysis to control for confounding</li>
 </ol>
 </div>
-<div id="lab" class="section level2">
-<h2 class="hasAnchor">
-<a href="#lab" class="anchor"></a>Lab</h2>
+<div class="section level2">
+<h2 id="lab">Lab<a class="anchor" aria-label="anchor" href="#lab"></a>
+</h2>
 <p><strong>Learning Objectives</strong></p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>Make stratified and unstratified Kaplan-Meier plots</li>
 <li>Perform Cox proportional hazards regression</li>
 <li>Assess proportional hazards assumption</li>
 </ol>
 <p><strong>Exercises</strong></p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>Load the Primary Biliary Cirrhosis (pbc) dataset from the survival package</li>
 <li>Create a <code>Surv</code> object using variables “time” and “status”, add this to the pbc dataframe</li>
-<li>Plot a KM curve for all participants using <code><a href="http://www.sthda.com/english/rpkgs/survminer/">library(survminer)</a></code> function <code>ggsurvplot()</code>
+<li>Plot a KM curve for all participants using <code><a href="https://rpkgs.datanovia.com/survminer/index.html" class="external-link">library(survminer)</a></code> function <code>ggsurvplot()</code>
 </li>
 <li>Stratify by treatment and add a p-value to this plot (see <code>?ggsurvplot</code>)</li>
 <li>Check whether these p-values correspond to results from a log-rank test</li>
@@ -157,47 +159,57 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/waldronbios2/session8/">https://​github.com/​waldronbios2/​session8/​</a>
-</li>
-<li>Full course notes at <br><a href="https://waldronbios2.github.io/cunybios2/">https://​waldronbios2.github.io/​cunybios2/​</a>
-</li>
-<li>git clone at <br><a href="https://github.com/waldronbios2/session8.git">https://​github.com/​waldronbios2/​session8.git</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a></small></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>
-<a href="https://waldronlab.io">Levi Waldron</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-2725-0694" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="https://github.com/waldronbios2/session8/" class="external-link">Browse source code</a></li>
+<li><a href="https://waldronbios2.github.io/cunybios2/" class="external-link">Full course notes</a></li>
+<li><a href="https://github.com/waldronbios2/session8.git" class="external-link">git clone</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/waldronbios2/templatesession/actions"><img src="https://github.com/waldronbios2/session8/workflows/build/badge.svg" alt="Actions Status"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://creativecommons.org/licenses/by/4.0" class="external-link">CC BY 4.0</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing session8</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>
+<a href="https://waldronlab.io" class="external-link">Levi Waldron</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-2725-0694" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/waldronbios2/templatesession/actions" class="external-link"><img src="https://github.com/waldronbios2/session8/workflows/build/badge.svg" alt="Actions Status"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://waldronlab.io">Levi Waldron</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://waldronlab.io" class="external-link">Levi Waldron</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -205,6 +217,8 @@
 
   
 
+
+  
 
   </body>
 </html>

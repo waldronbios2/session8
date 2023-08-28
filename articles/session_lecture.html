@@ -25,6 +25,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -37,14 +39,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">session8</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Lecture and Lab
      
     <span class="caret"></span>
@@ -57,23 +59,23 @@
       <a href="../articles/session_lecture.pdf">Lecture notes PDF</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="../articles/session_lab.html">Lab materials</a>
     </li>
   </ul>
 </li>
-<li class="dropdown-header">
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/waldronbios2/session8/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a href="https://github.com/waldronbios2/session8/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://twitter.com/leviwaldron1">
-    <span class="fab fa fab fa-twitter fa-lg"></span>
+  <a href="https://twitter.com/leviwaldron1" class="external-link">
+    <span class="fab fa-twitter fa-lg"></span>
      
   </a>
 </li>
@@ -87,26 +89,27 @@
 
       
 
-      </header><script src="session_lecture_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Session 8: Survival analysis part 3</h1>
-                        <h4 class="author">Levi Waldron</h4>
+                        <h4 data-toc-skip class="author">Levi
+Waldron</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/waldronbios2/session8/blob/master/vignettes/session_lecture.Rmd"><code>vignettes/session_lecture.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/waldronbios2/session8/blob/HEAD/vignettes/session_lecture.Rmd" class="external-link"><code>vignettes/session_lecture.Rmd</code></a></small>
       <div class="hidden name"><code>session_lecture.Rmd</code></div>
 
     </div>
 
     
     
-<div id="learning-objectives-and-outline" class="section level1">
-<h1 class="hasAnchor">
-<a href="#learning-objectives-and-outline" class="anchor"></a>Learning objectives and outline</h1>
-<div id="learning-objectives" class="section level2">
-<h2 class="hasAnchor">
-<a href="#learning-objectives" class="anchor"></a>Learning objectives</h2>
+<div class="section level2">
+<h2 id="learning-objectives-and-outline">Learning objectives and outline<a class="anchor" aria-label="anchor" href="#learning-objectives-and-outline"></a>
+</h2>
+<div class="section level3">
+<h3 id="learning-objectives">Learning objectives<a class="anchor" aria-label="anchor" href="#learning-objectives"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>Check model assumptions and fit of the Cox model
 <ul>
@@ -129,9 +132,9 @@
 <li>Vittinghoff sections 6.2-6.4</li>
 </ul>
 </div>
-<div id="outline" class="section level2">
-<h2 class="hasAnchor">
-<a href="#outline" class="anchor"></a>Outline</h2>
+<div class="section level3">
+<h3 id="outline">Outline<a class="anchor" aria-label="anchor" href="#outline"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>Review</li>
 <li>Assumptions of Cox PH model</li>
@@ -143,14 +146,15 @@
 </ol>
 </div>
 </div>
-<div id="review" class="section level1">
-<h1 class="hasAnchor">
-<a href="#review" class="anchor"></a>Review</h1>
-<div id="cox-proportional-hazards-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cox-proportional-hazards-model" class="anchor"></a>Cox proportional hazards model</h2>
+<div class="section level2">
+<h2 id="review">Review<a class="anchor" aria-label="anchor" href="#review"></a>
+</h2>
+<div class="section level3">
+<h3 id="cox-proportional-hazards-model">Cox proportional hazards model<a class="anchor" aria-label="anchor" href="#cox-proportional-hazards-model"></a>
+</h3>
 <ul>
-<li>Cox proportional hazard regression assesses the relationship between a right-censored, time-to-event outcome and multiple predictors:
+<li>Cox proportional hazard regression assesses the relationship between
+a right-censored, time-to-event outcome and multiple predictors:
 <ul>
 <li>categorical variables (e.g., treatment groups)</li>
 <li>continuous variables</li>
@@ -158,169 +162,199 @@
 </li>
 </ul>
 <p><span class="math display">\[
-log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_p x_{pi}
+log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} +
+\beta_2 x_{2i} + ... + \beta_p x_{pi}
 \]</span></p>
 <ul>
-<li><p><span class="math inline">\(HR(x_i)\)</span> is the hazard of patient <span class="math inline">\(i\)</span> relative to baseline</p></li>
-<li><p><span class="math inline">\(h(t|x_i)\)</span> is the time-dependent hazard function <span class="math inline">\(h(t)\)</span> for patient <span class="math inline">\(i\)</span></p></li>
-<li><p><span class="math inline">\(h_0(t)\)</span> is the <em>baseline hazard function</em>, and is the negative of the slope of the <span class="math inline">\(S_0(t)\)</span>, the baseline <em>survival</em> function.</p></li>
+<li><p><span class="math inline">\(HR(x_i)\)</span> is the hazard of
+patient <span class="math inline">\(i\)</span> relative to
+baseline</p></li>
+<li><p><span class="math inline">\(h(t|x_i)\)</span> is the
+time-dependent hazard function <span class="math inline">\(h(t)\)</span>
+for patient <span class="math inline">\(i\)</span></p></li>
+<li><p><span class="math inline">\(h_0(t)\)</span> is the <em>baseline
+hazard function</em>, and is the negative of the slope of the <span class="math inline">\(S_0(t)\)</span>, the baseline <em>survival</em>
+function.</p></li>
 <li><p>Multiplicative model</p></li>
 </ul>
 </div>
-<div id="caveats-and-assumptions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#caveats-and-assumptions" class="anchor"></a>Caveats and Assumptions</h2>
+<div class="section level3">
+<h3 id="caveats-and-assumptions">Caveats and Assumptions<a class="anchor" aria-label="anchor" href="#caveats-and-assumptions"></a>
+</h3>
 <ul>
 <li>Categories with no events
 <ul>
 <li>can occur when the group is small or its risk is low</li>
 <li>HRs with respect to such a reference group are infinite</li>
-<li>hypothesis tests and CIs are difficult / impossible to interpret</li>
+<li>hypothesis tests and CIs are difficult / impossible to
+interpret</li>
 </ul>
 </li>
 <li>Assumptions of Cox PH model
 <ul>
 <li>Constant hazard ratio over time (proportional hazards)</li>
-<li>Linear association between log(HR) and predictors (log-linearity) / multiplicative relationship between hazard and predictors</li>
-<li>Independence of survival times between individuals in the sample</li>
-<li>Uninformative censoring: a censored participant is the same as an uncensored participant with the same covariates at still in the risk set after that time</li>
+<li>Linear association between log(HR) and predictors (log-linearity) /
+multiplicative relationship between hazard and predictors</li>
+<li>Independence of survival times between individuals in the
+sample</li>
+<li>Uninformative censoring: a censored participant is the same as an
+uncensored participant with the same covariates at still in the risk set
+after that time</li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="checking-assumptions-of-cox-model" class="section level1">
-<h1 class="hasAnchor">
-<a href="#checking-assumptions-of-cox-model" class="anchor"></a>Checking assumptions of Cox model</h1>
-<div id="residuals-analysis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#residuals-analysis" class="anchor"></a>Residuals analysis</h2>
+<div class="section level2">
+<h2 id="checking-assumptions-of-cox-model">Checking assumptions of Cox model<a class="anchor" aria-label="anchor" href="#checking-assumptions-of-cox-model"></a>
+</h2>
+<div class="section level3">
+<h3 id="residuals-analysis">Residuals analysis<a class="anchor" aria-label="anchor" href="#residuals-analysis"></a>
+</h3>
 <ul>
-<li>Residuals are used to investigate the lack of fit of a model to a given subject.</li>
-<li>For Cox regression, there’s no easy analog to the usual “observed minus predicted” residual</li>
+<li>Residuals are used to investigate the lack of fit of a model to a
+given subject.</li>
+<li>For Cox regression, there’s no easy analog to the usual “observed
+minus predicted” residual</li>
 </ul>
 </div>
-<div id="section" class="section level2">
-<h2></h2>
-
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://waldronlab.io/pensim">pensim</a></span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">mydat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://waldronlab.io/ProjectAsPackage/reference/create.data.html">create.data</a></span><span class="op">(</span>
-  nvars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
-  nsamples <span class="op">=</span> <span class="fl">500</span>,
-  cors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,
-  associations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>,
-  firstonly <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,
-  censoring <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8.5</span><span class="op">)</span>
-<span class="op">)</span><span class="op">$</span><span class="va">data</span></pre></div>
-<p>Rename variables of simulated data, and make one variable categorical:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span><span class="op">)</span>
-<span class="va">mydat</span> <span class="op">&lt;-</span> <span class="va">mydat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>Var1 <span class="op">=</span> <span class="va">a.1</span>, Var2 <span class="op">=</span> <span class="va">b.1</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Var1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html">cut</a></span><span class="op">(</span><span class="va">Var1</span>,
-                    breaks <span class="op">=</span> <span class="fl">2</span>,
-                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"high"</span><span class="op">)</span><span class="op">)</span>,
-         time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">ceiling</a></span><span class="op">(</span><span class="va">time</span> <span class="op">*</span> <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="section level3">
+<h3 id="section"></h3>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://waldronlab.io/pensim/" class="external-link">pensim</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">mydat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://waldronlab.io/ProjectAsPackage/reference/create.data.html" class="external-link">create.data</a></span><span class="op">(</span></span>
+<span>  nvars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  nsamples <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  cors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  associations <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>  firstonly <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  censoring <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8.5</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">$</span><span class="va">data</span></span></code></pre></div>
+<p>Rename variables of simulated data, and make one variable
+categorical:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mydat</span> <span class="op">&lt;-</span> <span class="va">mydat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>Var1 <span class="op">=</span> <span class="va">a.1</span>, Var2 <span class="op">=</span> <span class="va">b.1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Var1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">Var1</span>,</span>
+<span>                    breaks <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"high"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>         time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="va">time</span> <span class="op">*</span> <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="simulated-data-to-test-residuals-methods" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulated-data-to-test-residuals-methods" class="anchor"></a>Simulated data to test residuals methods</h2>
-
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mydat</span><span class="op">)</span></pre></div>
-<pre><code>##    Var1          Var2               time           cens      
-##  low :323   Min.   :-2.99695   Min.   :   5   Min.   :0.000  
-##  high:177   1st Qu.:-0.79008   1st Qu.: 691   1st Qu.:0.000  
-##             Median :-0.02126   Median :1970   Median :1.000  
-##             Mean   :-0.04594   Mean   :2529   Mean   :0.526  
-##             3rd Qu.: 0.68933   3rd Qu.:3874   3rd Qu.:1.000  
-##             Max.   : 3.05574   Max.   :8481   Max.   :1.000</code></pre>
+<div class="section level3">
+<h3 id="simulated-data-to-test-residuals-methods">Simulated data to test residuals methods<a class="anchor" aria-label="anchor" href="#simulated-data-to-test-residuals-methods"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mydat</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##    Var1          Var2               time           cens      </span></span>
+<span><span class="co">##  low :323   Min.   :-2.99695   Min.   :   5   Min.   :0.000  </span></span>
+<span><span class="co">##  high:177   1st Qu.:-0.79008   1st Qu.: 691   1st Qu.:0.000  </span></span>
+<span><span class="co">##             Median :-0.02126   Median :1970   Median :1.000  </span></span>
+<span><span class="co">##             Mean   :-0.04594   Mean   :2529   Mean   :0.526  </span></span>
+<span><span class="co">##             3rd Qu.: 0.68933   3rd Qu.:3874   3rd Qu.:1.000  </span></span>
+<span><span class="co">##             Max.   : 3.05574   Max.   :8481   Max.   :1.000</span></span></code></pre>
 </div>
-<div id="kaplan-meier-plot-of-simulated-data-stratified-by-var1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#kaplan-meier-plot-of-simulated-data-stratified-by-var1" class="anchor"></a>Kaplan-Meier plot of simulated data, stratified by Var1</h2>
+<div class="section level3">
+<h3 id="kaplan-meier-plot-of-simulated-data-stratified-by-var1">Kaplan-Meier plot of simulated data, stratified by Var1<a class="anchor" aria-label="anchor" href="#kaplan-meier-plot-of-simulated-data-stratified-by-var1"></a>
+</h3>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
-<div id="martingale-residuals" class="section level2">
-<h2 class="hasAnchor">
-<a href="#martingale-residuals" class="anchor"></a>Martingale residuals</h2>
+<div class="section level3">
+<h3 id="martingale-residuals">Martingale residuals<a class="anchor" aria-label="anchor" href="#martingale-residuals"></a>
+</h3>
 <ul>
-<li>censoring variable <span class="math inline">\(c_i\)</span> (1 if event, 0 if censored) minus the estimated cumulative hazard function <span class="math inline">\(H(t_i, X_i, \beta_i)\)</span> (1 - survival function)
+<li>censoring variable <span class="math inline">\(c_i\)</span> (1 if
+event, 0 if censored) minus the estimated cumulative hazard function
+<span class="math inline">\(H(t_i, X_i, \beta_i)\)</span> (1 - survival
+function)
 <ul>
-<li>E.g., for a subject censored at 1 year (<span class="math inline">\(c_i=0\)</span>), whose predicted cumulative hazard at 1 year was 30%, Martingale = <span class="math inline">\(0 - 0.30 = -0.30\)</span>.</li>
-<li>E.g. for a subject who had an event at 6 months, and whose predicted cumulative hazard at 6 months was 80%, Margingale = <span class="math inline">\(1 - 0.8 = 0.2\)</span>.</li>
+<li>E.g., for a subject censored at 1 year (<span class="math inline">\(c_i=0\)</span>), whose predicted cumulative hazard
+at 1 year was 30%, Martingale = <span class="math inline">\(0 - 0.30 =
+-0.30\)</span>.</li>
+<li>E.g. for a subject who had an event at 6 months, and whose predicted
+cumulative hazard at 6 months was 80%, Margingale = <span class="math inline">\(1 - 0.8 = 0.2\)</span>.</li>
 </ul>
 </li>
-<li>Problem: not symmetrically distributed, even when model fits the data well</li>
+<li>Problem: not symmetrically distributed, even when model fits the
+data well</li>
 </ul>
 </div>
-<div id="martingale-residuals-in-simulated-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#martingale-residuals-in-simulated-data" class="anchor"></a>Martingale residuals in simulated data</h2>
+<div class="section level3">
+<h3 id="martingale-residuals-in-simulated-data">Martingale residuals in simulated data<a class="anchor" aria-label="anchor" href="#martingale-residuals-in-simulated-data"></a>
+</h3>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
-<div id="deviance-residuals-in-simulated-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#deviance-residuals-in-simulated-data" class="anchor"></a>Deviance residuals in simulated data</h2>
+<div class="section level3">
+<h3 id="deviance-residuals-in-simulated-data">Deviance residuals in simulated data<a class="anchor" aria-label="anchor" href="#deviance-residuals-in-simulated-data"></a>
+</h3>
 <ul>
 <li>Deviance residuals are scaled Martingale residuals</li>
 <li>Should be more symmetrically distributed about zero?</li>
-<li>Observations with large deviance residuals are poorly predicted by the model <img src="session_lecture_files/figure-html/unnamed-chunk-6-1.png" width="700">
+<li>Observations with large deviance residuals are poorly predicted by
+the model
+<img src="session_lecture_files/figure-html/unnamed-chunk-6-1.png" width="700">
 </li>
 </ul>
 </div>
-<div id="schoenfeld-residuals" class="section level2">
-<h2 class="hasAnchor">
-<a href="#schoenfeld-residuals" class="anchor"></a>Schoenfeld residuals</h2>
+<div class="section level3">
+<h3 id="schoenfeld-residuals">Schoenfeld residuals<a class="anchor" aria-label="anchor" href="#schoenfeld-residuals"></a>
+</h3>
 <ul>
-<li>technical definition: contribution of a covariate at each event time to the partial derivative of the log-likelihood</li>
-<li>intuitive interpretation: the observed minus the expected values of the covariates at each event time.</li>
-<li>a random (unsystematic) pattern across event times gives evidence the covariate effect is not changing with respect to time</li>
-<li>If it is systematic, it suggests that as time passes, the covariate effect is changing.</li>
+<li>technical definition: contribution of a covariate at each event time
+to the partial derivative of the log-likelihood</li>
+<li>intuitive interpretation: the observed minus the expected values of
+the covariates at each event time.</li>
+<li>a random (unsystematic) pattern across event times gives evidence
+the covariate effect is not changing with respect to time</li>
+<li>If it is systematic, it suggests that as time passes, the covariate
+effect is changing.</li>
 </ul>
 </div>
-<div id="schoenfeld-residuals-for-simulated-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#schoenfeld-residuals-for-simulated-data" class="anchor"></a>Schoenfeld residuals for simulated data</h2>
+<div class="section level3">
+<h3 id="schoenfeld-residuals-for-simulated-data">Schoenfeld residuals for simulated data<a class="anchor" aria-label="anchor" href="#schoenfeld-residuals-for-simulated-data"></a>
+</h3>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
-<div id="schoenfeld-test-for-proportional-hazards" class="section level2">
-<h2 class="hasAnchor">
-<a href="#schoenfeld-test-for-proportional-hazards" class="anchor"></a>Schoenfeld test for proportional hazards</h2>
+<div class="section level3">
+<h3 id="schoenfeld-test-for-proportional-hazards">Schoenfeld test for proportional hazards<a class="anchor" aria-label="anchor" href="#schoenfeld-test-for-proportional-hazards"></a>
+</h3>
 <ul>
 <li>Tests correlation between scaled Schoenfeld residuals and time</li>
-<li>Equivalent to fitting a simple linear regression model with time as the predictor and residuals as the outcome</li>
-<li>Parametric analog of smoothing the residuals against time using LOWESS</li>
+<li>Equivalent to fitting a simple linear regression model with time as
+the predictor and residuals as the outcome</li>
+<li>Parametric analog of smoothing the residuals against time using
+LOWESS</li>
 <li>If the hazard ratio is constant, correlation should be zero.
 <ul>
-<li>Positive values of the correlation suggest that the log-hazard ratio increases with time.</li>
+<li>Positive values of the correlation suggest that the log-hazard ratio
+increases with time.</li>
 </ul>
 </li>
 </ul>
-<pre><code>##          chisq df     p
-## Var1   0.00887  1 0.925
-## Var2   4.92734  1 0.026
-## GLOBAL 5.07415  2 0.079</code></pre>
+<pre><code><span><span class="co">##          chisq df     p</span></span>
+<span><span class="co">## Var1   0.00887  1 0.925</span></span>
+<span><span class="co">## Var2   4.92734  1 0.026</span></span>
+<span><span class="co">## GLOBAL 5.07415  2 0.079</span></span></code></pre>
 </div>
-<div id="the-hazard-function-ht-stratified-by-var1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-hazard-function-ht-stratified-by-var1" class="anchor"></a>The hazard function h(t), stratified by Var1</h2>
+<div class="section level3">
+<h3 id="the-hazard-function-ht-stratified-by-var1">The hazard function h(t), stratified by Var1<a class="anchor" aria-label="anchor" href="#the-hazard-function-ht-stratified-by-var1"></a>
+</h3>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
-<div id="log-minus-log-plot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#log-minus-log-plot" class="anchor"></a>Log-minus-log plot</h2>
+<div class="section level3">
+<h3 id="log-minus-log-plot">Log-minus-log plot<a class="anchor" aria-label="anchor" href="#log-minus-log-plot"></a>
+</h3>
 <ul>
 <li>Used to check proportional hazards assumption</li>
 </ul>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 </div>
-<div id="example-primary-biliary-cirrhosis-pbc" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-primary-biliary-cirrhosis-pbc" class="anchor"></a>Example: Primary Biliary Cirrhosis (PBC)</h2>
+<div class="section level3">
+<h3 id="example-primary-biliary-cirrhosis-pbc">Example: Primary Biliary Cirrhosis (PBC)<a class="anchor" aria-label="anchor" href="#example-primary-biliary-cirrhosis-pbc"></a>
+</h3>
 <ul>
-<li>Mayo Clinic trial in primary biliary cirrhosis (PBC) of the liver conducted between 1974 and 1984, n=424 patients.</li>
+<li>Mayo Clinic trial in primary biliary cirrhosis (PBC) of the liver
+conducted between 1974 and 1984, n=424 patients.</li>
 <li>randomized placebo controlled trial of the drug D-penicillamine.
 <ul>
 <li>312 cases from RCT, plus additional 112 not from RCT.</li>
@@ -329,93 +363,96 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 <li>Primary outcome is (censored) time to death</li>
 </ul>
 </div>
-<div id="kaplan-meier-plot-of-treatment-and-placebo-arms" class="section level2">
-<h2 class="hasAnchor">
-<a href="#kaplan-meier-plot-of-treatment-and-placebo-arms" class="anchor"></a>Kaplan-Meier plot of treatment and placebo arms</h2>
-<p><img src="session_lecture_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
-<pre><code>## Warning: Vectorized input to `element_text()` is not officially supported.
-## Results may be unexpected or may change in future versions of ggplot2.</code></pre>
-<p><img src="session_lecture_files/figure-html/unnamed-chunk-12-2.png" width="700"></p>
+<div class="section level3">
+<h3 id="kaplan-meier-plot-of-treatment-and-placebo-arms">Kaplan-Meier plot of treatment and placebo arms<a class="anchor" aria-label="anchor" href="#kaplan-meier-plot-of-treatment-and-placebo-arms"></a>
+</h3>
+<p><img src="session_lecture_files/figure-html/unnamed-chunk-12-1.png" width="700"><img src="session_lecture_files/figure-html/unnamed-chunk-12-2.png" width="700"></p>
 </div>
 </div>
-<div id="tests-for-trend" class="section level1">
-<h1 class="hasAnchor">
-<a href="#tests-for-trend" class="anchor"></a>Tests for trend</h1>
-<div id="what-are-tests-for-trend" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-are-tests-for-trend" class="anchor"></a>What are tests for trend?</h2>
+<div class="section level2">
+<h2 id="tests-for-trend">Tests for trend<a class="anchor" aria-label="anchor" href="#tests-for-trend"></a>
+</h2>
+<div class="section level3">
+<h3 id="what-are-tests-for-trend">What are tests for trend?<a class="anchor" aria-label="anchor" href="#what-are-tests-for-trend"></a>
+</h3>
 <ul>
 <li>For models including an ordinal variablepush</li>
 <li>Such as PBC stage (1, 2, 3, 4), age category, …
 <ul>
-<li>Is there a linear / quadratic / cubic relationship between coefficients and their order?</li>
+<li>Is there a linear / quadratic / cubic relationship between
+coefficients and their order?</li>
 <li>Test by LRT or Wald Test</li>
 </ul>
 </li>
 </ul>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
-<div id="fitting-a-test-for-trend-in-r" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fitting-a-test-for-trend-in-r" class="anchor"></a>Fitting a test for trend in R</h2>
+<div class="section level3">
+<h3 id="fitting-a-test-for-trend-in-r">Fitting a test for trend in R<a class="anchor" aria-label="anchor" href="#fitting-a-test-for-trend-in-r"></a>
+</h3>
 <ul>
-<li>Just define stage as an <em>ordered factor</em> and tests for trend are done automatically:</li>
+<li>Just define stage as an <em>ordered factor</em> and tests for trend
+are done automatically:</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">pbc.os</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">pbc.os</span>, stageordered <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">stage</span>, ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">stageordered</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>  </pre></div>
-<pre><code>## Call:
-## coxph(formula = Surv(time, os) ~ stageordered, data = pbc.os)
-## 
-##   n= 312, number of events= 125 
-## 
-##                   coef exp(coef) se(coef)      z Pr(&gt;|z|)   
-## stageordered.L  2.1759    8.8099   0.6801  3.199  0.00138 **
-## stageordered.Q -0.3469    0.7069   0.5248 -0.661  0.50867   
-## stageordered.C  0.3209    1.3784   0.2990  1.073  0.28316   
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-##                exp(coef) exp(-coef) lower .95 upper .95
-## stageordered.L    8.8099     0.1135    2.3231    33.410
-## stageordered.Q    0.7069     1.4146    0.2527     1.977
-## stageordered.C    1.3784     0.7255    0.7671     2.477
-## 
-## Concordance= 0.702  (se = 0.022 )
-## Likelihood ratio test= 52.74  on 3 df,   p=2e-11
-## Wald test            = 43.92  on 3 df,   p=2e-09
-## Score (logrank) test = 53.85  on 3 df,   p=1e-11</code></pre>
-<p>Highly significant tests of overall fit by LRT, Wald, and logrank test.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pbc.os</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">pbc.os</span>, stageordered <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">stage</span>, ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">stageordered</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>  </span></code></pre></div>
+<pre><code><span><span class="co">## Call:</span></span>
+<span><span class="co">## coxph(formula = Surv(time, os) ~ stageordered, data = pbc.os)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##   n= 312, number of events= 125 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##                   coef exp(coef) se(coef)      z Pr(&gt;|z|)   </span></span>
+<span><span class="co">## stageordered.L  2.1759    8.8099   0.6801  3.199  0.00138 **</span></span>
+<span><span class="co">## stageordered.Q -0.3469    0.7069   0.5248 -0.661  0.50867   </span></span>
+<span><span class="co">## stageordered.C  0.3209    1.3784   0.2990  1.073  0.28316   </span></span>
+<span><span class="co">## ---</span></span>
+<span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##                exp(coef) exp(-coef) lower .95 upper .95</span></span>
+<span><span class="co">## stageordered.L    8.8099     0.1135    2.3231    33.410</span></span>
+<span><span class="co">## stageordered.Q    0.7069     1.4146    0.2527     1.977</span></span>
+<span><span class="co">## stageordered.C    1.3784     0.7255    0.7671     2.477</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Concordance= 0.702  (se = 0.022 )</span></span>
+<span><span class="co">## Likelihood ratio test= 52.74  on 3 df,   p=2e-11</span></span>
+<span><span class="co">## Wald test            = 43.92  on 3 df,   p=2e-09</span></span>
+<span><span class="co">## Score (logrank) test = 53.85  on 3 df,   p=1e-11</span></span></code></pre>
+<p>Highly significant tests of overall fit by LRT, Wald, and logrank
+test.</p>
 </div>
 </div>
-<div id="predictions-for-specific-covariate-patterns" class="section level1">
-<h1 class="hasAnchor">
-<a href="#predictions-for-specific-covariate-patterns" class="anchor"></a>Predictions for specific covariate patterns</h1>
-<div id="how-to-predict-survival-from-a-cox-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-to-predict-survival-from-a-cox-model" class="anchor"></a>How to predict survival from a Cox model?</h2>
+<div class="section level2">
+<h2 id="predictions-for-specific-covariate-patterns">Predictions for specific covariate patterns<a class="anchor" aria-label="anchor" href="#predictions-for-specific-covariate-patterns"></a>
+</h2>
+<div class="section level3">
+<h3 id="how-to-predict-survival-from-a-cox-model">How to predict survival from a Cox model?<a class="anchor" aria-label="anchor" href="#how-to-predict-survival-from-a-cox-model"></a>
+</h3>
 <ul>
 <li>The Cox model is a <em>relative</em> risk model
 <ul>
 <li>only predicts relative risks between pairs of subjects</li>
 </ul>
 </li>
-<li>Key is to calculate the overall <span class="math inline">\(S(t)\)</span>, then multiply it by the relative hazard for the specific covariate pattern.</li>
-<li>In this example we plot the baseline survival for all stages together, then for stages 1-4 separately.</li>
+<li>Key is to calculate the overall <span class="math inline">\(S(t)\)</span>, then multiply it by the relative
+hazard for the specific covariate pattern.</li>
+<li>In this example we plot the baseline survival for all stages
+together, then for stages 1-4 separately.</li>
 </ul>
 </div>
-<div id="predicted-survival-for-specific-covariate-patterns" class="section level2">
-<h2 class="hasAnchor">
-<a href="#predicted-survival-for-specific-covariate-patterns" class="anchor"></a>Predicted survival for specific covariate patterns</h2>
+<div class="section level3">
+<h3 id="predicted-survival-for-specific-covariate-patterns">Predicted survival for specific covariate patterns<a class="anchor" aria-label="anchor" href="#predicted-survival-for-specific-covariate-patterns"></a>
+</h3>
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 </div>
-<div id="multivariate-regression" class="section level2">
-<h2 class="hasAnchor">
-<a href="#multivariate-regression" class="anchor"></a>Multivariate regression</h2>
+<div class="section level3">
+<h3 id="multivariate-regression">Multivariate regression<a class="anchor" aria-label="anchor" href="#multivariate-regression"></a>
+</h3>
 <ul>
-<li>Same coding and objectives as for <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> and <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code>
+<li>Same coding and objectives as for <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> and
+<code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>
 <ul>
 <li>controlling for confounding</li>
 <li>testing for mediation</li>
@@ -424,49 +461,48 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 </li>
 </ul>
 </div>
-<div id="section-1" class="section level2">
-<h2></h2>
-
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">edema</span>
-             <span class="op">+</span> <span class="va">stage</span> <span class="op">+</span> <span class="va">arm</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></pre></div>
-<pre><code>## Call:
-## coxph(formula = Surv(time, os) ~ age + sex + edema + stage + 
-##     arm, data = pbc.os)
-## 
-##   n= 312, number of events= 125 
-## 
-##                   coef exp(coef)  se(coef)      z Pr(&gt;|z|)    
-## age           0.027618  1.028003  0.009362  2.950  0.00318 ** 
-## sexf         -0.317540  0.727938  0.248839 -1.276  0.20193    
-## edema0.5      0.538715  1.713804  0.275287  1.957  0.05036 .  
-## edema1        2.080422  8.007845  0.276959  7.512 5.84e-14 ***
-## stage2        1.535263  4.642546  1.034854  1.484  0.13793    
-## stage3        1.998217  7.375893  1.016097  1.967  0.04923 *  
-## stage4        2.666263 14.386101  1.016234  2.624  0.00870 ** 
-## armtreatment  0.057946  1.059658  0.189200  0.306  0.75940    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-##              exp(coef) exp(-coef) lower .95 upper .95
-## age             1.0280    0.97276    1.0093     1.047
-## sexf            0.7279    1.37374    0.4470     1.186
-## edema0.5        1.7138    0.58350    0.9992     2.940
-## edema1          8.0078    0.12488    4.6534    13.780
-## stage2          4.6425    0.21540    0.6108    35.288
-## stage3          7.3759    0.13558    1.0067    54.040
-## stage4         14.3861    0.06951    1.9630   105.430
-## armtreatment    1.0597    0.94370    0.7313     1.535
-## 
-## Concordance= 0.77  (se = 0.022 )
-## Likelihood ratio test= 107.6  on 8 df,   p=&lt;2e-16
-## Wald test            = 120.8  on 8 df,   p=&lt;2e-16
-## Score (logrank) test = 177.1  on 8 df,   p=&lt;2e-16</code></pre>
+<div class="section level3">
+<h3 id="section-1"></h3>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">edema</span></span>
+<span>             <span class="op">+</span> <span class="va">stage</span> <span class="op">+</span> <span class="va">arm</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Call:</span></span>
+<span><span class="co">## coxph(formula = Surv(time, os) ~ age + sex + edema + stage + </span></span>
+<span><span class="co">##     arm, data = pbc.os)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##   n= 312, number of events= 125 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##                   coef exp(coef)  se(coef)      z Pr(&gt;|z|)    </span></span>
+<span><span class="co">## age           0.027618  1.028003  0.009362  2.950  0.00318 ** </span></span>
+<span><span class="co">## sexf         -0.317540  0.727938  0.248839 -1.276  0.20193    </span></span>
+<span><span class="co">## edema0.5      0.538715  1.713804  0.275287  1.957  0.05036 .  </span></span>
+<span><span class="co">## edema1        2.080422  8.007845  0.276959  7.512 5.84e-14 ***</span></span>
+<span><span class="co">## stage2        1.535263  4.642546  1.034854  1.484  0.13793    </span></span>
+<span><span class="co">## stage3        1.998217  7.375893  1.016097  1.967  0.04923 *  </span></span>
+<span><span class="co">## stage4        2.666263 14.386101  1.016234  2.624  0.00870 ** </span></span>
+<span><span class="co">## armtreatment  0.057946  1.059658  0.189200  0.306  0.75940    </span></span>
+<span><span class="co">## ---</span></span>
+<span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##              exp(coef) exp(-coef) lower .95 upper .95</span></span>
+<span><span class="co">## age             1.0280    0.97276    1.0093     1.047</span></span>
+<span><span class="co">## sexf            0.7279    1.37374    0.4470     1.186</span></span>
+<span><span class="co">## edema0.5        1.7138    0.58350    0.9992     2.940</span></span>
+<span><span class="co">## edema1          8.0078    0.12488    4.6534    13.780</span></span>
+<span><span class="co">## stage2          4.6425    0.21540    0.6108    35.288</span></span>
+<span><span class="co">## stage3          7.3759    0.13558    1.0067    54.040</span></span>
+<span><span class="co">## stage4         14.3861    0.06951    1.9630   105.430</span></span>
+<span><span class="co">## armtreatment    1.0597    0.94370    0.7313     1.535</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Concordance= 0.77  (se = 0.022 )</span></span>
+<span><span class="co">## Likelihood ratio test= 107.6  on 8 df,   p=&lt;2e-16</span></span>
+<span><span class="co">## Wald test            = 120.8  on 8 df,   p=&lt;2e-16</span></span>
+<span><span class="co">## Score (logrank) test = 177.1  on 8 df,   p=&lt;2e-16</span></span></code></pre>
 </div>
-<div id="predicted-survival-for-adjusted-coefficients" class="section level2">
-<h2 class="hasAnchor">
-<a href="#predicted-survival-for-adjusted-coefficients" class="anchor"></a>Predicted survival for adjusted coefficients</h2>
+<div class="section level3">
+<h3 id="predicted-survival-for-adjusted-coefficients">Predicted survival for adjusted coefficients<a class="anchor" aria-label="anchor" href="#predicted-survival-for-adjusted-coefficients"></a>
+</h3>
 <ul>
 <li>Can create Kaplan-Meier curves for crude or unadjusted coefficients
 <ul>
@@ -475,32 +511,33 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 </li>
 <li>Idea is to estimate hazard ratio in an unadjusted model:</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="va">unadjfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">stage</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">unadjfit</span><span class="op">)</span></pre></div>
-<pre><code>##   stage2   stage3   stage4 
-## 1.607014 2.149500 3.062775</code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">unadjfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">stage</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">unadjfit</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   stage2   stage3   stage4 </span></span>
+<span><span class="co">## 1.607014 2.149500 3.062775</span></span></code></pre>
 </div>
-<div id="predicted-survival-for-adjusted-coefficients-contd" class="section level2">
-<h2 class="hasAnchor">
-<a href="#predicted-survival-for-adjusted-coefficients-contd" class="anchor"></a>Predicted survival for adjusted coefficients (cont’d)</h2>
+<div class="section level3">
+<h3 id="predicted-survival-for-adjusted-coefficients-contd">Predicted survival for adjusted coefficients (cont’d)<a class="anchor" aria-label="anchor" href="#predicted-survival-for-adjusted-coefficients-contd"></a>
+</h3>
 <ul>
 <li>and in an adjusted model:</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="va">adjfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">edema</span>
-                <span class="op">+</span> <span class="va">stage</span> <span class="op">+</span> <span class="va">arm</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">adjfit</span><span class="op">)</span></pre></div>
-<pre><code>##          age         sexf     edema0.5       edema1       stage2       stage3 
-##    0.0276179   -0.3175396    0.5387152    2.0804217    1.5352629    1.9982170 
-##       stage4 armtreatment 
-##    2.6662626    0.0579460</code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">adjfit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">edema</span></span>
+<span>                <span class="op">+</span> <span class="va">stage</span> <span class="op">+</span> <span class="va">arm</span>, data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">adjfit</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##          age         sexf     edema0.5       edema1       stage2       stage3 </span></span>
+<span><span class="co">##    0.0276179   -0.3175396    0.5387152    2.0804217    1.5352629    1.9982170 </span></span>
+<span><span class="co">##       stage4 armtreatment </span></span>
+<span><span class="co">##    2.6662626    0.0579460</span></span></code></pre>
 </div>
-<div id="predicted-survival-for-adjusted-coefficients-contd-1" class="section level2">
-<h2 class="hasAnchor">
-<a href="#predicted-survival-for-adjusted-coefficients-contd-1" class="anchor"></a>Predicted survival for adjusted coefficients (cont’d)</h2>
+<div class="section level3">
+<h3 id="predicted-survival-for-adjusted-coefficients-contd-1">Predicted survival for adjusted coefficients (cont’d)<a class="anchor" aria-label="anchor" href="#predicted-survival-for-adjusted-coefficients-contd-1"></a>
+</h3>
 <ul>
-<li>The survival function will be calculated for a “baseline” group, say stage 1, then exponentiated with the adjusted coefficient, e.g.: <span class="math display">\[
+<li>The survival function will be calculated for a “baseline” group, say
+stage 1, then exponentiated with the adjusted coefficient, e.g.: <span class="math display">\[
 [S_{stage=1}(t)]^{exp(\beta_{stage=4})}
 \]</span>
 </li>
@@ -508,60 +545,67 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 <p><img src="session_lecture_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 </div>
 </div>
-<div id="stratification" class="section level1">
-<h1 class="hasAnchor">
-<a href="#stratification" class="anchor"></a>Stratification</h1>
-<div id="what-is-stratification" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-is-stratification" class="anchor"></a>What is stratification?</h2>
+<div class="section level2">
+<h2 id="stratification">Stratification<a class="anchor" aria-label="anchor" href="#stratification"></a>
+</h2>
+<div class="section level3">
+<h3 id="what-is-stratification">What is stratification?<a class="anchor" aria-label="anchor" href="#what-is-stratification"></a>
+</h3>
 <ul>
-<li><p>relevant to all kinds of regression, not just survival analysis</p></li>
+<li><p>relevant to all kinds of regression, not just survival
+analysis</p></li>
 <li>
 <p>when analysis is separated into groups or strata</p>
 <ul>
-<li>must have an adequate number of events in each stratum (at least 5 to 7)</li>
-<li>can be used to adjust for variables with strong impact on survival</li>
+<li>must have an adequate number of events in each stratum (at least 5
+to 7)</li>
+<li>can be used to adjust for variables with strong impact on
+survival</li>
 <li>can help solve proportional hazards violations</li>
 </ul>
 </li>
 <li><p>Strata have different baseline hazards</p></li>
-<li><p>Coefficients / Hazard Ratios are calculated within stratum then combined.</p></li>
+<li><p>Coefficients / Hazard Ratios are calculated within stratum then
+combined.</p></li>
 <li><p>Vittinghoff 6.3.2</p></li>
 </ul>
 </div>
-<div id="how-to-stratify" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-to-stratify" class="anchor"></a>How to stratify</h2>
-<p><strong>Example - in R, strata() can be added to any model formula</strong> </p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="va">mycox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html">strata</a></span><span class="op">(</span><span class="va">stage</span><span class="op">)</span>, 
-               data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mycox</span><span class="op">)</span></pre></div>
-<pre><code>## Call:
-## coxph(formula = Surv(time, os) ~ trt + strata(stage), data = pbc.os)
-## 
-##   n= 312, number of events= 125 
-## 
-##        coef exp(coef) se(coef)      z Pr(&gt;|z|)
-## trt -0.1063    0.8992   0.1814 -0.586    0.558
-## 
-##     exp(coef) exp(-coef) lower .95 upper .95
-## trt    0.8992      1.112    0.6302     1.283
-## 
-## Concordance= 0.494  (se = 0.025 )
-## Likelihood ratio test= 0.34  on 1 df,   p=0.6
-## Wald test            = 0.34  on 1 df,   p=0.6
-## Score (logrank) test = 0.34  on 1 df,   p=0.6</code></pre>
+<div class="section level3">
+<h3 id="how-to-stratify">How to stratify<a class="anchor" aria-label="anchor" href="#how-to-stratify"></a>
+</h3>
+<p><strong>Example - in R, strata() can be added to any model
+formula</strong> </p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mycox</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">os</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/strata.html" class="external-link">strata</a></span><span class="op">(</span><span class="va">stage</span><span class="op">)</span>, </span>
+<span>               data <span class="op">=</span> <span class="va">pbc.os</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mycox</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Call:</span></span>
+<span><span class="co">## coxph(formula = Surv(time, os) ~ trt + strata(stage), data = pbc.os)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##   n= 312, number of events= 125 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##        coef exp(coef) se(coef)      z Pr(&gt;|z|)</span></span>
+<span><span class="co">## trt -0.1063    0.8992   0.1814 -0.586    0.558</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     exp(coef) exp(-coef) lower .95 upper .95</span></span>
+<span><span class="co">## trt    0.8992      1.112    0.6302     1.283</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Concordance= 0.494  (se = 0.025 )</span></span>
+<span><span class="co">## Likelihood ratio test= 0.34  on 1 df,   p=0.6</span></span>
+<span><span class="co">## Wald test            = 0.34  on 1 df,   p=0.6</span></span>
+<span><span class="co">## Score (logrank) test = 0.34  on 1 df,   p=0.6</span></span></code></pre>
 </div>
 </div>
-<div id="competing-risks-data" class="section level1">
-<h1 class="hasAnchor">
-<a href="#competing-risks-data" class="anchor"></a>Competing Risks Data</h1>
-<div id="what-are-competing-risks" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-are-competing-risks" class="anchor"></a>What are competing risks?</h2>
+<div class="section level2">
+<h2 id="competing-risks-data">Competing Risks Data<a class="anchor" aria-label="anchor" href="#competing-risks-data"></a>
+</h2>
+<div class="section level3">
+<h3 id="what-are-competing-risks">What are competing risks?<a class="anchor" aria-label="anchor" href="#what-are-competing-risks"></a>
+</h3>
 <ul>
-<li>Example from Vittinghoff 6.5: The MrOS study (Orwoll et al. 2005) followed men over 65 to examine predictors of bone fracture and low BMD (subclinical bone loss)</li>
+<li>Example from Vittinghoff 6.5: The MrOS study (Orwoll et al. 2005)
+followed men over 65 to examine predictors of bone fracture and low BMD
+(subclinical bone loss)</li>
 <li>At end of study participants had:
 <ul>
 <li>developed fracture (outcome of interest),</li>
@@ -570,24 +614,29 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 </ul>
 </li>
 </ul>
-<p>Orwoll, E. <em>et al.</em> (2005). Design and baseline characteristics of the osteoporotic fractures in men (MrOS) study–a large observational study of the determinants of fracture in older men. Contemporary Clinical Trials, 26(5), 569–585.</p>
+<p>Orwoll, E. <em>et al.</em> (2005). Design and baseline
+characteristics of the osteoporotic fractures in men (MrOS) study–a
+large observational study of the determinants of fracture in older men.
+Contemporary Clinical Trials, 26(5), 569–585.</p>
 </div>
-<div id="why-not-treat-died-prior-to-fracture-and-alive-without-fracture-as-censored" class="section level2">
-<h2 class="hasAnchor">
-<a href="#why-not-treat-died-prior-to-fracture-and-alive-without-fracture-as-censored" class="anchor"></a>Why not treat died prior to fracture and alive without fracture as censored?</h2>
+<div class="section level3">
+<h3 id="why-not-treat-died-prior-to-fracture-and-alive-without-fracture-as-censored">Why not treat died prior to fracture and alive without fracture as
+censored?<a class="anchor" aria-label="anchor" href="#why-not-treat-died-prior-to-fracture-and-alive-without-fracture-as-censored"></a>
+</h3>
 <ul>
 <li>Recall the independent censoring assumption (Vittinghoff 6.6.4):
 <ul>
-<li>censored people are similar to those who remain at risk in terms of developing the event of interest;</li>
+<li>censored people are similar to those who remain at risk in terms of
+developing the event of interest;</li>
 <li>censoring is independent of the event of interest.</li>
 <li>For patients who died this assumption is highly suspect</li>
 </ul>
 </li>
 </ul>
 </div>
-<div id="reasons-for-right-censored-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reasons-for-right-censored-data" class="anchor"></a>Reasons for right censored data</h2>
+<div class="section level3">
+<h3 id="reasons-for-right-censored-data">Reasons for right censored data<a class="anchor" aria-label="anchor" href="#reasons-for-right-censored-data"></a>
+</h3>
 <ul>
 <li>Cut-off date of analysis (administrative censoring):
 <ul>
@@ -596,23 +645,28 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 </li>
 <li>Loss to follow-up
 <ul>
-<li>Independence may be problematic if sicker individuals discontinue participant in study (lack of energy, too ill, return to home country)</li>
-<li>or if healthier individuals discontinue participation (don’t feel the need to continue, start new life in other country)</li>
+<li>Independence may be problematic if sicker individuals discontinue
+participant in study (lack of energy, too ill, return to home
+country)</li>
+<li>or if healthier individuals discontinue participation (don’t feel
+the need to continue, start new life in other country)</li>
 </ul>
 </li>
 <li>Competing risks:
 <ul>
 <li>Often informative.</li>
-<li>In competing risks analysis, independence between competing risks is not required</li>
+<li>In competing risks analysis, independence between competing risks is
+not required</li>
 </ul>
 </li>
 </ul>
 </div>
-<div id="very-brief-summary-of-competing-risk-methods" class="section level2">
-<h2 class="hasAnchor">
-<a href="#very-brief-summary-of-competing-risk-methods" class="anchor"></a>Very brief summary of competing risk methods</h2>
+<div class="section level3">
+<h3 id="very-brief-summary-of-competing-risk-methods">Very brief summary of competing risk methods<a class="anchor" aria-label="anchor" href="#very-brief-summary-of-competing-risk-methods"></a>
+</h3>
 <ul>
-<li>1-to-1 mapping between hazard and cumulative incidence function is lost in competing risks</li>
+<li>1-to-1 mapping between hazard and cumulative incidence function is
+lost in competing risks</li>
 <li>Standard Kaplan-Meier estimator is biased for competing risks data
 <ul>
 <li>Aalen-Johansen estimator is better choice</li>
@@ -620,62 +674,81 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 </li>
 <li>
 <em>Gary’s test</em> is analogous to log-rank test</li>
-<li>cause-specific standard Cox PH model might be useful for prognostic (causal) testing, but not estimating a population Hazard Ratio</li>
+<li>cause-specific standard Cox PH model might be useful for prognostic
+(causal) testing, but not estimating a population Hazard Ratio</li>
 </ul>
 </div>
-<div id="resources-for-competing-risk-methods" class="section level2">
-<h2 class="hasAnchor">
-<a href="#resources-for-competing-risk-methods" class="anchor"></a>Resources for competing risk methods</h2>
+<div class="section level3">
+<h3 id="resources-for-competing-risk-methods">Resources for competing risk methods<a class="anchor" aria-label="anchor" href="#resources-for-competing-risk-methods"></a>
+</h3>
 <ul>
-<li>Z. Zhang, Survival analysis in the presence of competing risks, Ann Transl Med. 2017 Feb; 5(3): 47. PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28251126">28251126</a>
+<li>Z. Zhang, Survival analysis in the presence of competing risks, Ann
+Transl Med. 2017 Feb; 5(3): 47. PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/28251126" class="external-link">28251126</a>
 </li>
 <li>
-<a href="https://CRAN.R-project.org/package=cmprsk">cmprsk</a> package</li>
+<a href="https://CRAN.R-project.org/package=cmprsk" class="external-link">cmprsk</a>
+package</li>
 <li>
-<a href="https://cran.r-project.org/package=riskRegression">riskRegression</a> package</li>
+<a href="https://cran.r-project.org/package=riskRegression" class="external-link">riskRegression</a>
+package</li>
 </ul>
 </div>
 </div>
-<div id="propensity-score-analysis" class="section level1">
-<h1 class="hasAnchor">
-<a href="#propensity-score-analysis" class="anchor"></a>Propensity score analysis</h1>
-<div id="what-is-propensity-score-analysis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-is-propensity-score-analysis" class="anchor"></a>What is propensity score analysis?</h2>
+<div class="section level2">
+<h2 id="propensity-score-analysis">Propensity score analysis<a class="anchor" aria-label="anchor" href="#propensity-score-analysis"></a>
+</h2>
+<div class="section level3">
+<h3 id="what-is-propensity-score-analysis">What is propensity score analysis?<a class="anchor" aria-label="anchor" href="#what-is-propensity-score-analysis"></a>
+</h3>
 <ul>
-<li>an alternative to multivariate regression to control for hypothesized confounders in observational studies:</li>
+<li>an alternative to multivariate regression to control for
+hypothesized confounders in observational studies:</li>
 </ul>
-<pre><code>outcome ~ exposure + counfounder1 + confounder2</code></pre>
+<pre><code><span><span class="va">outcome</span> <span class="op">~</span> <span class="va">exposure</span> <span class="op">+</span> <span class="va">counfounder1</span> <span class="op">+</span> <span class="va">confounder2</span></span></code></pre>
 <ul>
-<li>a stratification approach that is more practical than stratifying on multiple hypothesized confounders</li>
+<li>a stratification approach that is more practical than stratifying on
+multiple hypothesized confounders</li>
 <li>an approach to summarizing many covariates into a single score</li>
-<li>a convenient approach to controlling for many hypothesized confounders</li>
+<li>a convenient approach to controlling for many hypothesized
+confounders</li>
 </ul>
 </div>
-<div id="propensity-score-approach-to-correction-for-confounders" class="section level2">
-<h2 class="hasAnchor">
-<a href="#propensity-score-approach-to-correction-for-confounders" class="anchor"></a>Propensity score approach to correction for confounders</h2>
+<div class="section level3">
+<h3 id="propensity-score-approach-to-correction-for-confounders">Propensity score approach to correction for confounders<a class="anchor" aria-label="anchor" href="#propensity-score-approach-to-correction-for-confounders"></a>
+</h3>
 <ul>
 <li>
-<em>Step 1</em>: fit the propensity score model (no outcome) that predicts propensity for exposure based on confounders:</li>
+<em>Step 1</em>: fit the propensity score model (no outcome) that
+predicts propensity for exposure based on confounders:</li>
 </ul>
-<pre><code>exposure ~ counfounder1 + confounder2</code></pre>
+<pre><code><span><span class="va">exposure</span> <span class="op">~</span> <span class="va">counfounder1</span> <span class="op">+</span> <span class="va">confounder2</span></span></code></pre>
 <ul>
-<li><p><em>Step 2</em>: use propensity predictions to match or stratify participants with similar propensity (for example, stratifying on quintiles of propensity)</p></li>
-<li><p><em>Step 3</em>: check adequacy of matching or stratification, ie by comparing attributes of matched participants</p></li>
-<li><p><em>Step 4</em>: test hypothesis <em>among matched participants</em>:</p></li>
+<li><p><em>Step 2</em>: use propensity predictions to match or stratify
+participants with similar propensity (for example, stratifying on
+quintiles of propensity)</p></li>
+<li><p><em>Step 3</em>: check adequacy of matching or stratification, ie
+by comparing attributes of matched participants</p></li>
+<li><p><em>Step 4</em>: test hypothesis <em>among matched
+participants</em>:</p></li>
 </ul>
-<pre><code>outcome ~ exposure</code></pre>
+<pre><code><span><span class="va">outcome</span> <span class="op">~</span> <span class="va">exposure</span></span></code></pre>
 </div>
-<div id="propensity-score-references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#propensity-score-references" class="anchor"></a>Propensity score references</h2>
+<div class="section level3">
+<h3 id="propensity-score-references">Propensity score references<a class="anchor" aria-label="anchor" href="#propensity-score-references"></a>
+</h3>
 <ul>
-<li>P.C. Austin (2011), An Introduction to Propensity Score Methods for Reducing the Effects of Confounding in Observational Studies. Multivariate Behavioral Research, 46:3, 399-424, DOI: <a href="http://dx.doi.org/10.1080/00273171.2011.568786">10.1080/00273171.2011.568786</a>
+<li>P.C. Austin (2011), An Introduction to Propensity Score Methods for
+Reducing the Effects of Confounding in Observational Studies.
+Multivariate Behavioral Research, 46:3, 399-424, DOI: <a href="http://dx.doi.org/10.1080/00273171.2011.568786" class="external-link">10.1080/00273171.2011.568786</a>
 </li>
-<li>R. d’Agostino (1998), Tutorial in Biostatistics: propensity score methods for bias reduction in the comparison of a treatment to a non-randomized control group. Stat. Med. 17, 2265-2281. <a href="http://www.stat.ubc.ca/~john/papers/DAgostinoSIM1998.pdf">http://www.stat.ubc.ca/~john/papers/DAgostinoSIM1998.pdf</a>
+<li>R. d’Agostino (1998), Tutorial in Biostatistics: propensity score
+methods for bias reduction in the comparison of a treatment to a
+non-randomized control group. Stat. Med. 17, 2265-2281. <a href="http://www.stat.ubc.ca/~john/papers/DAgostinoSIM1998.pdf" class="external-link">http://www.stat.ubc.ca/~john/papers/DAgostinoSIM1998.pdf</a>
 </li>
-<li>You don’t need any special package to do basic propensity score matching (e.g. stratifying by quintiles), but the <a href="https://cran.r-project.org/package=MatchIt">MatchIt</a> package provides multiple matching approaches, diagnostics, good documentation</li>
+<li>You don’t need any special package to do basic propensity score
+matching (e.g. stratifying by quintiles), but the <a href="https://cran.r-project.org/package=MatchIt" class="external-link">MatchIt</a> package
+provides multiple matching approaches, diagnostics, good
+documentation</li>
 </ul>
 </div>
 </div>
@@ -692,11 +765,13 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://waldronlab.io">Levi Waldron</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://waldronlab.io" class="external-link">Levi Waldron</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -704,6 +779,8 @@ log(HR(x_i)) = log \frac{h(t|x_i)}{h_0(t)} = \beta_0 + \beta_1 x_{1i} + \beta_2 
 
   
 
+
+  
 
   </body>
 </html>
