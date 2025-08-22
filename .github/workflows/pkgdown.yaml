@@ -1,39 +1,61 @@
-name: build
-on: push
+name: Build and Deploy pkgdown Site
+
+on:
+  push:
+    branches:
+      - main # Or 'master', depending on your repository's default branch
+
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-22.04
-    container: rocker/verse:latest
+    # Use a specific container version for reproducibility
+    container: rocker/verse:4.4
+    # Set minimum required permissions for the GITHUB_TOKEN
+    permissions:
+      contents: read # To check out the repository
+      pages: write  # To deploy to GitHub Pages
+
     steps:
-      - name: trigger action on main site
-        run: |
-          curl \
-            -X POST \
-            -u "${{ secrets.PAT_USERNAME}}:${{secrets.PAT_TOKEN}}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            -d '{"ref":"master"}' \
-            https://api.github.com/repos/waldronbios2/cunybios2/actions/workflows/build.yaml/dispatches
+      # CRITICAL: The cross-repository trigger using a PAT has been removed
+      # due to major security risks. Consider using reusable workflows instead.
+
       - name: Checkout Repository
-        uses: actions/checkout@v1
-      # System dependencies
-      - name: Install apt dependencies
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.4' # Specify R version
+
+      - name: Cache R package dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-r-4.4-${{ hashFiles('**/DESCRIPTION') }}
+          restore-keys: |
+            ${{ runner.os }}-r-4.4-
+
+      - name: Install R package dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          # This action reads your DESCRIPTION file to install dependencies
+          packages: any::remotes, any::pkgdown
+
+      - name: Build pkgdown site
+        run: Rscript -e 'pkgdown::build_site()'
+        
+      - name: Render supplementary PDF vignette
         run: |
-          apt-get update
-          apt-get -y upgrade
-          apt-get -y install rsync #for deploy
-          apt-get -y install libharfbuzz-dev libfribidi-dev #for pkgdown
-      - name: Install Package Dependencies
-        run: |-
-          Rscript -e "install.packages('remotes')"
-          Rscript -e "remotes::install_deps(dependencies = TRUE)"
-      # use several steps instead of build_site() because I don't want build_reference()
-      - name: Build pkgdown
-        run: |
-           PATH=$PATH:$HOME/bin/ Rscript -e 'pkgdown::build_site(".")'
-           PATH=$PATH:$HOME/bin/ Rscript -e 'rmarkdown::render(input="vignettes/session_lecture.Rmd", output_format = "beamer_presentation", output_file = "../docs/articles/session_lecture.pdf")'
-      - name: Deploy 🚀
+          rmarkdown::render(
+            input = "vignettes/session_lecture.Rmd",
+            output_format = "beamer_presentation",
+            output_file = "../docs/articles/session_lecture.pdf"
+          )
+        shell: Rscript {0}
+
+      - name: Deploy to GitHub Pages 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: docs # The folder the action should deploy.
+          # GITHUB_TOKEN is used by default, no need to specify
+          branch: gh-pages # The branch the action should deploy to
+          folder: docs # The folder the action should deploy
