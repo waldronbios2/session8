@@ -2,17 +2,18 @@ home:
   strip_header: true
   links:
   - text: Full course notes
-    href: https://waldronbios2.github.io/cunybios2/
+    href: https://bios2.waldronlab.io
   - text: git clone
     href: https://github.com/waldronbios2/session8.git
 
-url: https://bios2.waldronlab.io
+url: https://waldronbios2.github.io/session1/
 
 template:
   params:
     bootswatch: lumen
     ganalytics: UA-176789980-1
-
+    bs_version: 5
+    
 navbar:
   structure:
     left:  [home, articles]
@@ -39,3 +40,4 @@ navbar:
 authors:
   Levi Waldron:
     href: https://waldronlab.io
+

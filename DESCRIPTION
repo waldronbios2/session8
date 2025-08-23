@@ -18,5 +18,5 @@ Suggests:
 License: CC BY 4.0
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/waldronbios2/session8
+URL: https://waldronbios2.github.io/session8/
 VignetteBuilder: knitr
